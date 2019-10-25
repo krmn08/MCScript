@@ -3,7 +3,6 @@ package com.krmnserv321.mcscript.script.ast.expression;
 import com.krmnserv321.mcscript.script.ast.Token;
 
 public class NullCheckExpression extends Expression {
-
     private Expression nullable;
     private Expression expression;
 

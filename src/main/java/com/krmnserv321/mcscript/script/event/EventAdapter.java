@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class EventAdapter implements Listener {
-
     private static Map<String, EnumMap<EventPriority, EventList>> eventMap = new HashMap<>();
 
     private static RegisteredListener LOWEST_LISTENER;
