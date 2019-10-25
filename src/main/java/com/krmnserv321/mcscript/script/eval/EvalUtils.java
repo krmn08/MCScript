@@ -230,6 +230,19 @@ public final class EvalUtils {
         return o.toString();
     }
 
+    public static String toProperty(String name) {
+        int pos = 0;
+        for (char c : name.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                break;
+            }
+
+            pos++;
+        }
+
+        return name.substring(0, pos).toLowerCase() + name.substring(pos);
+    }
+
     public static boolean isStatic(Member member) {
         return Modifier.isStatic(member.getModifiers());
     }

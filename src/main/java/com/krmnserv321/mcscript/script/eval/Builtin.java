@@ -4,10 +4,14 @@ import com.krmnserv321.mcscript.script.java.FieldMap;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static com.krmnserv321.mcscript.script.eval.EvalUtils.isStatic;
+import static com.krmnserv321.mcscript.script.eval.EvalUtils.toProperty;
 import static com.krmnserv321.mcscript.script.eval.Evaluator.NONE_OBJECT;
 
 public final class Builtin {
@@ -289,18 +293,5 @@ public final class Builtin {
 
     public static boolean contains(String name) {
         return builtinMap.containsKey(name);
-    }
-
-    private static String toProperty(String name) {
-        int pos = 0;
-        for (char c : name.toCharArray()) {
-            if (Character.isLowerCase(c)) {
-                break;
-            }
-
-            pos++;
-        }
-
-        return name.substring(0, pos).toLowerCase() + name.substring(pos);
     }
 }

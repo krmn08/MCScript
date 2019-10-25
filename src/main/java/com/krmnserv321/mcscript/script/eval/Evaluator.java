@@ -2561,19 +2561,6 @@ public final class Evaluator {
 
             throw new NoSuchMethodException();
         }
-
-        private String toProperty(String name) {
-            int pos = 0;
-            for (char c : name.toCharArray()) {
-                if (Character.isLowerCase(c)) {
-                    break;
-                }
-
-                pos++;
-            }
-
-            return name.substring(0, pos).toLowerCase() + name.substring(pos);
-        }
     }
 
     private static class Break {
