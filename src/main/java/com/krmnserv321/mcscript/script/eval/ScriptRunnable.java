@@ -3,7 +3,6 @@ package com.krmnserv321.mcscript.script.eval;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@SuppressWarnings("WeakerAccess")
 public class ScriptRunnable extends BukkitRunnable {
     private Function function;
     private int count;

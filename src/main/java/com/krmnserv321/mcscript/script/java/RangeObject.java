@@ -2,7 +2,6 @@ package com.krmnserv321.mcscript.script.java;
 
 import java.util.Iterator;
 
-@SuppressWarnings("WeakerAccess")
 public abstract class RangeObject implements Iterator<Integer>, Iterable<Integer> {
     protected int start;
     protected int end;

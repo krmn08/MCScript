@@ -1,6 +1,6 @@
 package com.krmnserv321.mcscript.script.eval;
 
-@SuppressWarnings("WeakerAccess")
+
 public abstract class BuiltinFunction {
     private String name;
     private boolean varArgs;

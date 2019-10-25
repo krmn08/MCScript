@@ -10,7 +10,6 @@ import java.util.*;
 import static com.krmnserv321.mcscript.script.eval.EvalUtils.isStatic;
 import static com.krmnserv321.mcscript.script.eval.Evaluator.NONE_OBJECT;
 
-@SuppressWarnings("WeakerAccess")
 public final class Builtin {
     private static Map<String, List<BuiltinFunction>> builtinMap = new HashMap<>();
 

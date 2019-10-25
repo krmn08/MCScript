@@ -45,7 +45,7 @@ public class PublicEnvironment {
         return storeMap.get(key);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public Function getExtension(Class type, String name) {
         Map<String, Function> extensionMap = getExtensionMap(type);
         if (extensionMap != null) {
@@ -59,7 +59,7 @@ public class PublicEnvironment {
         storeMap.put(key, value);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void putExtension(Class type, String name, Function function) {
         if (!extensionMap.containsKey(type)) {
             extensionMap.put(type, new HashMap<>());
@@ -77,12 +77,12 @@ public class PublicEnvironment {
         return null;
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public boolean isPublic(String key) {
         return storeMap.containsKey(key);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public ClassLoader getClassLoader() {
         return loader;
     }

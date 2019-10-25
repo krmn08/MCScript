@@ -163,6 +163,7 @@ public final class MCScript extends JavaPlugin implements Listener {
         }
     }
 
+    @SuppressWarnings("EmptyMethod")
     @EventHandler
     public void onScriptDisableEvent(ScriptDisableEvent e) {
     }
@@ -505,7 +506,7 @@ public final class MCScript extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GREEN + "[ MCScript ] " + ChatColor.WHITE + message);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void repl(Player player, boolean start) {
         if (start) {
             if (replSet.add(player)) {

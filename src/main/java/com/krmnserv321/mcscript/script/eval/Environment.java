@@ -26,12 +26,12 @@ public class Environment {
         this.deferStack = deferStack;
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void setOuter(Environment outer) {
         this.outer = outer;
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void setDeferStack(Stack<DeferObject> deferStack) {
         this.deferStack = deferStack;
     }
@@ -59,7 +59,7 @@ public class Environment {
         return value;
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void put(String key, Object value) {
         Map<String, Object> map = getOuterMap(key);
         if (map == null) {
@@ -73,7 +73,7 @@ public class Environment {
         constMap.put(key, value);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public void addDefer(Environment environment, Statement statement) {
         if (deferStack != null) {
             deferStack.push(new DeferObject(environment, statement));
@@ -82,7 +82,7 @@ public class Environment {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public boolean isConstant(String key) {
         boolean contains = constMap.containsKey(key);
 
@@ -97,7 +97,7 @@ public class Environment {
         return publicEnvironment.isPublic(key);
     }
 
-    @SuppressWarnings("WeakerAccess")
+
     public PublicEnvironment getPublicEnvironment() {
         return publicEnvironment;
     }

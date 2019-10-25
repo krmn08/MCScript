@@ -26,7 +26,6 @@ public final class Evaluator {
     private static final Break BREAK = new Break();
     private static final Continue CONTINUE = new Continue();
 
-    @SuppressWarnings("WeakerAccess")
     public static final NoneObject NONE_OBJECT = new NoneObject();
     private static final Class<Void> VOID = Void.TYPE;
 
@@ -1036,7 +1035,6 @@ public final class Evaluator {
         return result.toArray(new Pair[0]);
     }
 
-    @SuppressWarnings({"WeakerAccess"})
     public static Object applyFunction(Function function, Object... args) {
         Environment environment = newEnclosedEnvironment(function.getEnvironment());
 
@@ -1092,7 +1090,6 @@ public final class Evaluator {
         return result;
     }
 
-    @SuppressWarnings({"WeakerAccess"})
     public static Object applyFunctionWithPair(Function function, Pair... args) {
         Environment environment = newEnclosedEnvironment(function.getEnvironment());
 
@@ -2124,7 +2121,6 @@ public final class Evaluator {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static Object newInstance(ClassObject object, Pair... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, ArgumentMismatchException {
         Constructor<?>[] constructors;
         if (object.isUnsafe()) {
@@ -2149,7 +2145,6 @@ public final class Evaluator {
         throw new ArgumentMismatchException();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static Object callMethod(ClassMethod method, Pair... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ArgumentMismatchException {
         Class clazz = method.getReceiver();
         String name = method.getName();
@@ -2186,7 +2181,6 @@ public final class Evaluator {
         throw new NoSuchMethodException();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static Object callMethod(InstanceMethod method, Pair... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ArgumentMismatchException {
         Object receiver = method.getReceiver();
         String name = method.getFieldName();
@@ -2235,7 +2229,6 @@ public final class Evaluator {
         throw new NoSuchMethodException();
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static Object callMethod(CallableMethod callable, Pair... args) throws InvocationTargetException, IllegalAccessException {
         Object receiver = callable.getReceiver();
         Method method = callable.getMethod();
@@ -2252,7 +2245,6 @@ public final class Evaluator {
         return ret;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static Object callBuiltin(BuiltinCallable callable, Pair... args) throws ArgumentMismatchException {
         String name = callable.getName();
         for (BuiltinFunction function : Builtin.get(name)) {

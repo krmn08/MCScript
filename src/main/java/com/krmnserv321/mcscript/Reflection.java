@@ -6,7 +6,6 @@ import org.bukkit.command.SimpleCommandMap;
 
 import java.lang.reflect.InvocationTargetException;
 
-@SuppressWarnings("WeakerAccess")
 public final class Reflection {
     private Reflection() {
     }
