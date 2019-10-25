@@ -506,7 +506,6 @@ public final class MCScript extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GREEN + "[ MCScript ] " + ChatColor.WHITE + message);
     }
 
-
     public void repl(Player player, boolean start) {
         if (start) {
             if (replSet.add(player)) {

@@ -88,7 +88,6 @@ public final class Evaluator {
                 return evaluated;
             }
 
-
             if (evaluated instanceof String) {
                 return new ScriptError(node.getToken(), (String) evaluated);
             }

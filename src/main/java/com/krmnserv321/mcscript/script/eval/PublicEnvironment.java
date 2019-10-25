@@ -45,7 +45,6 @@ public class PublicEnvironment {
         return storeMap.get(key);
     }
 
-
     public Function getExtension(Class type, String name) {
         Map<String, Function> extensionMap = getExtensionMap(type);
         if (extensionMap != null) {
@@ -58,7 +57,6 @@ public class PublicEnvironment {
     public void put(String key, Object value) {
         storeMap.put(key, value);
     }
-
 
     public void putExtension(Class type, String name, Function function) {
         if (!extensionMap.containsKey(type)) {
@@ -77,11 +75,9 @@ public class PublicEnvironment {
         return null;
     }
 
-
     public boolean isPublic(String key) {
         return storeMap.containsKey(key);
     }
-
 
     public ClassLoader getClassLoader() {
         return loader;

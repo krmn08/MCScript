@@ -671,7 +671,6 @@ public class Lexer {
         return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9' || ch == '_';
     }
 
-
     public void setLineCount(int lineCount) {
         this.lineCount = lineCount;
     }
