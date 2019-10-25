@@ -1,0 +1,11 @@
+name: MCScript
+version: ${project.version}
+main: com.krmnserv321.mcscript.MCScript
+api-version: 1.14
+authors: [krmn]
+description: Scripting Language for Minecraft
+
+commands:
+  mcs:
+    description: MCScript Command
+    usage: mcs

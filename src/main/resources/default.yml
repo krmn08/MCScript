@@ -1,0 +1,5 @@
+ScriptPath: plugins/MCScript/script
+Depend: []
+SoftDepend: []
+Ignore: []
+Import: []
