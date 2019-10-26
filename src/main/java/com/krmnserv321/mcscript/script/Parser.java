@@ -198,6 +198,7 @@ public class Parser {
                 nextToken();
                 continue;
             }
+
             Statement statement = parseStatement();
             if (statement != null) {
                 statements.add(statement);
@@ -780,9 +781,11 @@ public class Parser {
                 accessor = exp;
             }
         }
+
         if (!expectPeek(TokenType.RBracket)) {
             return null;
         }
+
         return new AccessExpression(token, left, accessor);
     }
 
@@ -1109,6 +1112,7 @@ public class Parser {
         if (args == null) {
             return null;
         }
+
         expression.getArguments().addAll(args);
         return expression;
     }

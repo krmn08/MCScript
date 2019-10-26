@@ -409,6 +409,7 @@ public class Lexer {
                 if (c == null) {
                     return new Token(TokenType.Illegal, path, lineCount, Character.toString(ch));
                 }
+
                 return new Token(TokenType.Character, path, lineCount, c);
             } else if (ch == '"') {
                 String string = readString();
