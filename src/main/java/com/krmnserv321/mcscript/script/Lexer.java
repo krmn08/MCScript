@@ -277,7 +277,8 @@ public class Lexer {
                 case '<':
                     if (ch == '<') {
                         readChar();
-                        if (peekChar() == '=') {readChar();
+                        if (peekChar() == '=') {
+                            readChar();
                             token = LEFT_SHIFT_ASSIGN;
                         } else {
                             token = LEFT_SHIFT;
