@@ -9,3 +9,8 @@ commands:
   mcs:
     description: MCScript Command
     usage: mcs
+    permission: mcscript.mcs
+permissions:
+  mcscript.mcs:
+    description: Allows mcs command
+    default: op
