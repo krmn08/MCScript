@@ -178,7 +178,7 @@ public final class MCScript extends JavaPlugin implements Listener {
             player.sendMessage(ChatColor.AQUA + e.getMessage());
             String script = scriptMap.get(player);
 
-            String input = script == null ? e.getMessage() : script + SEPARATOR + e.getMessage();
+            String input = script == null ? e.getMessage() : script + "\n" + e.getMessage();
 
             Parser parser = new Parser(new Lexer(applyDefine(input)));
             Program program = parser.parseProgram();
