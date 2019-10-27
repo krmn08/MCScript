@@ -57,7 +57,10 @@ public class Function extends ScriptCallable {
         if (lambda) {
             if (parameters.isEmpty()) {
                 return "() -> " + body;
+            } else if (parameters.size() >= 2) {
+                return "(" + parameters + ") -> " + body;
             }
+
             return parameters + " -> " + body;
         }
 
