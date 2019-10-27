@@ -66,6 +66,7 @@ public final class MCScript extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        instance = this;
         getServer().getPluginManager().registerEvents(this, this);
         reload();
     }
@@ -95,6 +96,7 @@ public final class MCScript extends JavaPlugin implements Listener {
 
                     EventAdapter.unregisterAll();
                     reload();
+                    sendMessage(sender, "Reload complete");
                     return true;
                 } else if (sender instanceof Player) {
                     Player player = (Player) sender;
@@ -226,8 +228,6 @@ public final class MCScript extends JavaPlugin implements Listener {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void reload() {
-        instance = this;
-
         try {
             File folder = getDataFolder();
 
