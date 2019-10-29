@@ -25,7 +25,7 @@ public final class EventAdapter implements Listener {
 
     static {
         EventAdapter adapter = new EventAdapter();
-        
+
         LOWEST_LISTENER = new RegisteredListener(adapter, ((listener, event) -> adapter.onLowest(event)), EventPriority.LOWEST, MCScript.getInstance(), false);
         LOW_LISTENER = new RegisteredListener(adapter, ((listener, event) -> adapter.onLow(event)), EventPriority.LOW, MCScript.getInstance(), false);
         NORMAL_LISTENER = new RegisteredListener(adapter, ((listener, event) -> adapter.onNormal(event)), EventPriority.NORMAL, MCScript.getInstance(), false);
