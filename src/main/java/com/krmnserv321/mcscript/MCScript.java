@@ -430,8 +430,8 @@ public final class MCScript extends JavaPlugin implements Listener {
     }
 
     private Set<Class> getBukkitClasses() {
-        String url = Bukkit.class.getResource("Bukkit.class").toString();
-        String jarPath = url.substring("jar:file:/".length(), url.lastIndexOf("!"));
+        String path = Bukkit.class.getResource("Bukkit.class").getPath();
+        String jarPath = path.substring("file:/".length(), path.lastIndexOf("!"));
         ClassLoader loader = getClassLoader();
         try {
             JarFile jarFile = new JarFile(jarPath);
