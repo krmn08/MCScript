@@ -32,9 +32,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -416,8 +418,8 @@ public final class MCScript extends JavaPlugin implements Listener {
         }
     }
 
-    private Set<Class> getBukkitClasses() {
-        String path = Bukkit.class.getResource("Bukkit.class").getPath();
+    private Set<Class> getBukkitClasses() throws UnsupportedEncodingException {
+        String path = URLDecoder.decode(Bukkit.class.getResource("Bukkit.class").getPath(), "UTF-8");
         String jarPath = path.substring("file:/".length(), path.lastIndexOf("!"));
         ClassLoader loader = getClassLoader();
         try {
