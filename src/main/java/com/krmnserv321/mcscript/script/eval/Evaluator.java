@@ -280,11 +280,7 @@ public final class Evaluator {
         } else if (node instanceof EventStatement) {
             EventStatement statement = (EventStatement) node;
             Token token = statement.getEventName().getToken();
-            if (MCScript.getEventSet().contains(token.toString())) {
-                EventAdapter.register(new EventFunction(environment, token, statement.getPriority(), statement.getBody()));
-            } else {
-                return new ScriptError(token, "unknown event: " + token);
-            }
+            EventAdapter.register(new EventFunction(environment, token, statement.getPriority(), statement.getBody()));
         } else if (node instanceof CallExpression) {
             CallExpression call = (CallExpression) node;
             Expression callFunction = call.getFunction();

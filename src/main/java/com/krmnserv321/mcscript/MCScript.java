@@ -49,8 +49,6 @@ public final class MCScript extends JavaPlugin implements Listener {
 
     private static Map<String, String> defineMap = new LinkedHashMap<>();
 
-    private static Set<String> eventSet = new HashSet<>();
-
     private static Set<Player> replSet = new HashSet<>();
     private static Map<Player, String> scriptMap = new HashMap<>();
     private static Map<Player, Environment> environmentMap = new HashMap<>();
@@ -283,18 +281,7 @@ public final class MCScript extends JavaPlugin implements Listener {
             List<String> ignoreList = config.getStringList("Ignore");
             config.getStringList("Import").forEach(publicEnvironment::importClass);
 
-            eventSet.clear();
-
-            getBukkitClasses().forEach(clazz -> {
-                publicEnvironment.importClass(clazz);
-                String typeName = clazz.getTypeName();
-                if (typeName.contains("org.bukkit.event") && typeName.endsWith("Event")) {
-                    String name = clazz.getSimpleName();
-                    eventSet.add(name.substring(0, name.length() - 5));
-                }
-            });
-
-            eventSet.add("ScriptDisable");
+            getBukkitClasses().forEach(publicEnvironment::importClass);
 
             for (Method method : Bukkit.class.getMethods()) {
                 if (Modifier.isStatic(method.getModifiers())) {
@@ -525,9 +512,5 @@ public final class MCScript extends JavaPlugin implements Listener {
     public static void registerCommand(Command command) {
         Reflection.getCommandMap().register("mcscript", command);
         commandSet.add(command);
-    }
-
-    public static Set<String> getEventSet() {
-        return eventSet;
     }
 }
