@@ -2461,23 +2461,15 @@ public final class Evaluator {
 
         if (type == Byte.class) {
             if (param == Short.class || param == Integer.class || param == Long.class || param == Float.class || param == Double.class) {
-                return EvalUtils.cast((Long) o, param.getSimpleName());
+                return EvalUtils.cast((double) o, param.getSimpleName());
             }
         } else if (type == Short.class || type == Character.class) {
             if (param == Integer.class || param == Long.class || param == Float.class || param == Double.class) {
-                return EvalUtils.cast((Long) o, param.getSimpleName());
+                return EvalUtils.cast((double) o, param.getSimpleName());
             }
-        } else if (type == Integer.class) {
-            if (param == Long.class || param == Float.class || param == Double.class) {
-                return EvalUtils.cast((Long) o, param.getSimpleName());
-            }
-        } else if (type == Long.class) {
+        } else if (type == Integer.class || type == Long.class) {
             if (param == Float.class || param == Double.class) {
-                return EvalUtils.cast((Long) o, param.getSimpleName());
-            }
-        } else if (type == Float.class) {
-            if (param == Double.class) {
-                return EvalUtils.cast((Long) o, param.getSimpleName());
+                return EvalUtils.cast((double) o, param.getSimpleName());
             }
         }
 
