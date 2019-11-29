@@ -46,9 +46,6 @@ public class AssignExpression extends Expression {
 
     @Override
     public String toString() {
-        if (operator != null) {
-            return name + " " + getTokenLiteral() + " " + value;
-        }
         return name + " " + getTokenLiteral() + " " + value;
     }
 }

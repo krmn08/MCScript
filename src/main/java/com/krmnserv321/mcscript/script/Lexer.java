@@ -598,7 +598,6 @@ public class Lexer {
                     }
                     readChar();
                 }
-                readChar();
             } else {
                 while (ch != '*' || peekChar() != '/') {
                     if (ch == 0) {
@@ -607,8 +606,8 @@ public class Lexer {
                     readChar();
                 }
                 readChar();
-                readChar();
             }
+            readChar();
         }
     }
 
