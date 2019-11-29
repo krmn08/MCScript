@@ -10,7 +10,7 @@ public final class EvalUtils {
     private EvalUtils() {
     }
 
-    public static Class toPrimitiveClass(Class clazz) {
+    public static Class<?> toPrimitiveClass(Class<?> clazz) {
         if (clazz == Boolean.class) {
             return boolean.class;
         } else if (clazz == Character.class) {
@@ -32,7 +32,7 @@ public final class EvalUtils {
         }
     }
 
-    public static Class toWrapperClass(Class clazz) {
+    public static Class<?> toWrapperClass(Class<?> clazz) {
         if (clazz == boolean.class) {
             return Boolean.class;
         } else if (clazz == char.class) {
@@ -98,25 +98,25 @@ public final class EvalUtils {
         return o instanceof Long || o instanceof Integer || o instanceof Short || o instanceof Byte;
     }
 
-    public static Object toJavaFunction(Callable callable, Class type) {
+    public static Object toJavaFunction(Callable callable, Class<?> type) {
         if (type == BiConsumer.class) {
-            return (BiConsumer) callable::call;
+            return (BiConsumer<Object, Object>) callable::call;
         } else if (type == BiFunction.class) {
-            return (BiFunction) callable::call;
+            return (BiFunction<Object, Object, Object>) callable::call;
         } else if (type == BinaryOperator.class) {
-            return (BinaryOperator) callable::call;
+            return (BinaryOperator<Object>) callable::call;
         } else if (type == BiPredicate.class) {
-            return (BiPredicate) (o, o2) -> (boolean) callable.call(o, o2);
+            return (BiPredicate<Object, Object>) (o, o2) -> (boolean) callable.call(o, o2);
         } else if (type == BooleanSupplier.class) {
             return (BooleanSupplier) () -> (boolean) callable.call();
         } else if (type == Consumer.class) {
-            return (Consumer) callable::call;
+            return (Consumer<Object>) callable::call;
         } else if (type == DoubleBinaryOperator.class) {
             return (DoubleBinaryOperator) (o, o2) -> (double) callable.call(o, o2);
         } else if (type == DoubleConsumer.class) {
             return (DoubleConsumer) callable::call;
         } else if (type == DoubleFunction.class) {
-            return (DoubleFunction) callable::call;
+            return (DoubleFunction<Object>) callable::call;
         } else if (type == DoublePredicate.class) {
             return (DoublePredicate) (o) -> (boolean) callable.call(o);
         } else if (type == DoubleSupplier.class) {
@@ -128,13 +128,13 @@ public final class EvalUtils {
         } else if (type == DoubleUnaryOperator.class) {
             return (DoubleUnaryOperator) (o) -> (double) callable.call(o);
         } else if (type == Function.class) {
-            return (Function) callable::call;
+            return (Function<Object, Object>) callable::call;
         } else if (type == IntBinaryOperator.class) {
             return (IntBinaryOperator) (o, o2) -> (int) callable.call(o, o2);
         } else if (type == IntConsumer.class) {
             return (IntConsumer) callable::call;
         } else if (type == IntFunction.class) {
-            return (IntFunction) callable::call;
+            return (IntFunction<Object>) callable::call;
         } else if (type == IntPredicate.class) {
             return (IntPredicate) (o) -> (boolean) callable.call(o);
         } else if (type == IntSupplier.class) {
@@ -150,7 +150,7 @@ public final class EvalUtils {
         } else if (type == LongConsumer.class) {
             return (LongConsumer) callable::call;
         } else if (type == LongFunction.class) {
-            return (LongFunction) callable::call;
+            return (LongFunction<Object>) callable::call;
         } else if (type == LongPredicate.class) {
             return (LongPredicate) (o) -> (boolean) callable.call(o);
         } else if (type == LongSupplier.class) {
@@ -162,31 +162,31 @@ public final class EvalUtils {
         } else if (type == LongUnaryOperator.class) {
             return (LongUnaryOperator) (o) -> (long) callable.call(o);
         } else if (type == ObjDoubleConsumer.class) {
-            return (ObjDoubleConsumer) callable::call;
+            return (ObjDoubleConsumer<Object>) callable::call;
         } else if (type == ObjIntConsumer.class) {
-            return (ObjIntConsumer) callable::call;
+            return (ObjIntConsumer<Object>) callable::call;
         } else if (type == ObjLongConsumer.class) {
-            return (ObjLongConsumer) callable::call;
+            return (ObjLongConsumer<Object>) callable::call;
         } else if (type == Predicate.class) {
-            return (Predicate) (o) -> (boolean) callable.call(o);
+            return (Predicate<Object>) (o) -> (boolean) callable.call(o);
         } else if (type == Supplier.class) {
-            return (Supplier) callable::call;
+            return (Supplier<Object>) callable::call;
         } else if (type == ToDoubleBiFunction.class) {
-            return (ToDoubleBiFunction) (o, o2) -> (long) callable.call(o, o2);
+            return (ToDoubleBiFunction<Object, Object>) (o, o2) -> (long) callable.call(o, o2);
         } else if (type == ToDoubleFunction.class) {
-            return (ToDoubleFunction) (o) -> (double) callable.call(o);
+            return (ToDoubleFunction<Object>) (o) -> (double) callable.call(o);
         } else if (type == ToIntBiFunction.class) {
-            return (ToIntBiFunction) (o, o2) -> (int) callable.call(o, o2);
+            return (ToIntBiFunction<Object, Object>) (o, o2) -> (int) callable.call(o, o2);
         } else if (type == ToIntFunction.class) {
-            return (ToIntFunction) (o) -> (int) callable.call(o);
+            return (ToIntFunction<Object>) (o) -> (int) callable.call(o);
         } else if (type == ToLongBiFunction.class) {
-            return (ToLongBiFunction) (o, o2) -> (long) callable.call(o, o2);
+            return (ToLongBiFunction<Object, Object>) (o, o2) -> (long) callable.call(o, o2);
         } else if (type == ToLongFunction.class) {
-            return (ToLongFunction) (o) -> (long) callable.call(o);
+            return (ToLongFunction<Object>) (o) -> (long) callable.call(o);
         } else if (type == UnaryOperator.class) {
-            return (UnaryOperator) callable::call;
+            return (UnaryOperator<Object>) callable::call;
         } else if (type == org.bukkit.util.Consumer.class) {
-            return (org.bukkit.util.Consumer) callable::call;
+            return (org.bukkit.util.Consumer<Object>) callable::call;
         } else if (type == Runnable.class) {
             return (Runnable) callable::call;
         }
@@ -199,9 +199,9 @@ public final class EvalUtils {
             return "null";
         }
 
-        Class type = o.getClass();
+        Class<?> type = o.getClass();
         if (type.isArray()) {
-            Class componentType = type.getComponentType();
+            Class<?> componentType = type.getComponentType();
             if (componentType.isArray()) {
                 return Arrays.deepToString((Object[]) o);
             }
@@ -255,7 +255,7 @@ public final class EvalUtils {
             }
         }
 
-        Class type = getClassFromNullable(o);
+        Class<?> type = getClassFromNullable(o);
         if (type == NullClass.class) {
             return !param.isPrimitive();
         }
@@ -306,7 +306,7 @@ public final class EvalUtils {
         return param.isAssignableFrom(type);
     }
 
-    private static Class getClassFromNullable(Object o) {
+    private static Class<?> getClassFromNullable(Object o) {
         if (o == null) {
             return NullClass.class;
         }

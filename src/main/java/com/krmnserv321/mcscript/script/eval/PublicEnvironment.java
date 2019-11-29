@@ -7,7 +7,7 @@ public class PublicEnvironment {
     private ClassLoader loader;
 
     private Map<String, Object> storeMap = new HashMap<>();
-    private Map<Class, Map<String, Function>> extensionMap = new HashMap<>();
+    private Map<Class<?>, Map<String, Function>> extensionMap = new HashMap<>();
 
     public PublicEnvironment(ClassLoader loader) {
         this.loader = loader;
@@ -28,13 +28,13 @@ public class PublicEnvironment {
         importClass(Double.class);
     }
 
-    public void importClass(Class clazz) {
+    public void importClass(Class<?> clazz) {
         put(clazz.getSimpleName(), ClassObject.of(clazz));
     }
 
     public void importClass(String fqcn) {
         try {
-            Class clazz = loader.loadClass(fqcn);
+            Class<?> clazz = loader.loadClass(fqcn);
             put(clazz.getSimpleName(), ClassObject.of(clazz));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class PublicEnvironment {
         return storeMap.get(key);
     }
 
-    public Function getExtension(Class type, String name) {
+    public Function getExtension(Class<?> type, String name) {
         Map<String, Function> extensionMap = getExtensionMap(type);
         if (extensionMap != null) {
             return extensionMap.get(name);
@@ -58,14 +58,14 @@ public class PublicEnvironment {
         storeMap.put(key, value);
     }
 
-    public void putExtension(Class type, String name, Function function) {
+    public void putExtension(Class<?> type, String name, Function function) {
         if (!extensionMap.containsKey(type)) {
             extensionMap.put(type, new HashMap<>());
         }
         extensionMap.get(type).put(name, function);
     }
 
-    private Map<String, Function> getExtensionMap(Class type) {
+    private Map<String, Function> getExtensionMap(Class<?> type) {
         for (Class<?> c : extensionMap.keySet()) {
             if (c.isAssignableFrom(type)) {
                 return extensionMap.get(c);

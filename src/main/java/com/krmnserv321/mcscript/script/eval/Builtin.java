@@ -26,7 +26,7 @@ public final class Builtin {
                 Object o = args.get(0);
                 FieldMap fieldMap = new FieldMap();
                 if (o instanceof ClassObject) {
-                    Class type = ((ClassObject) o).getObject();
+                    Class<?> type = ((ClassObject) o).getObject();
                     for (Method method : type.getMethods()) {
                         String name = method.getName();
                         if (name.equals("getClass")) {
@@ -55,7 +55,7 @@ public final class Builtin {
                         }
                     }
                 } else {
-                    Class type = o.getClass();
+                    Class<?> type = o.getClass();
                     for (Method method : type.getMethods()) {
                         String name = method.getName();
                         if (name.equals("getClass")) {
@@ -170,7 +170,7 @@ public final class Builtin {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject type = args.get(0);
-                List list = args.get(1);
+                List<Object> list = args.get(1);
 
                 Object array = Array.newInstance(type.getObject(), list.size());
                 for (int i = 0; i < list.size(); i++) {
@@ -185,12 +185,11 @@ public final class Builtin {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject type = args.get(0);
-                List list = args.get(1);
-                java.util.function.Function function = args.get(2);
+                List<Object> list = args.get(1);
+                java.util.function.Function<Object, Object> function = args.get(2);
 
                 Object array = Array.newInstance(type.getObject(), list.size());
                 for (int i = 0; i < list.size(); i++) {
-                    //noinspection unchecked
                     Array.set(array, i, function.apply(list.get(i)));
                 }
 

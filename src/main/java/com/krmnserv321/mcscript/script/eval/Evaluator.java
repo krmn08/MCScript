@@ -115,7 +115,7 @@ public final class Evaluator {
             return multiValue;
         } else if (node instanceof ListLiteral) {
             ListLiteral literal = (ListLiteral) node;
-            List list = new ArrayList();
+            List<Object> list = new ArrayList<>();
             for (Expression element : literal.getElements()) {
                 Object e = eval(environment, element);
                 if (isError(e)) {
@@ -128,7 +128,7 @@ public final class Evaluator {
             return list;
         } else if (node instanceof MapLiteral) {
             MapLiteral literal = (MapLiteral) node;
-            Map map = new LinkedHashMap();
+            Map<Object, Object> map = new LinkedHashMap<>();
             for (Map.Entry<Expression, Expression> entry : literal.getMap().entrySet()) {
                 Object key = eval(environment, entry.getKey());
                 if (isError(key)) {
@@ -426,7 +426,7 @@ public final class Evaluator {
             }
 
             if (le instanceof List) {
-                List list = (List) le;
+                List<Object> list = (List<Object>) le;
                 if (isNotFloatNumber(ae)) {
                     int index = ((Number) ae).intValue();
                     try {
@@ -502,7 +502,7 @@ public final class Evaluator {
 
                 return new ScriptError(node.getToken(), "not an integer: " + ae);
             } else if (le instanceof Map) {
-                return ((Map) le).get(ae);
+                return ((Map<Object, Object>) le).get(ae);
             } else if (le instanceof ConfigurationSection) {
                 if (ae instanceof String) {
                     return ((ConfigurationSection) le).get((String) ae);
@@ -701,7 +701,7 @@ public final class Evaluator {
         }
 
         if (iterable instanceof Iterable) {
-            Iterable itr = (Iterable) iterable;
+            Iterable<Object> itr = (Iterable<Object>) iterable;
             if (statement.getVariable2() == null) {
                 for (Object o : itr) {
                     enclosedEnv.put(statement.getVariable1().toString(), o);
@@ -736,7 +736,7 @@ public final class Evaluator {
 
             return NONE_OBJECT;
         } else if (iterable instanceof Map) {
-            Map<Object, Object> map = (Map) iterable;
+            Map<Object, Object> map = (Map<Object, Object>) iterable;
             if (statement.getVariable2() == null) {
                 for (Map.Entry<Object, Object> entry : map.entrySet()) {
                     enclosedEnv.put(statement.getVariable1().toString(), entry.getKey());
@@ -1364,7 +1364,7 @@ public final class Evaluator {
                 }
 
                 if (le instanceof List) {
-                    List list = (List) le;
+                    List<Object> list = (List<Object>) le;
                     if (isNotFloatNumber(ae)) {
                         int index = ((Number) ae).intValue();
                         try {
@@ -1380,7 +1380,7 @@ public final class Evaluator {
 
                     return new ScriptError(token, "not an integer: " + access.getAccessor());
                 } else if (le instanceof Map) {
-                    ((Map) le).put(ae, right);
+                    ((Map<Object, Object>) le).put(ae, right);
                     return right;
                 } else if (le instanceof ConfigurationSection) {
                     if (ae instanceof String) {
@@ -1550,16 +1550,16 @@ public final class Evaluator {
         } else if (right instanceof Collection) {
             switch (operator) {
                 case "in":
-                    return ((Collection) right).contains(left);
+                    return ((Collection<Object>) right).contains(left);
                 case "notin":
-                    return !((Collection) right).contains(left);
+                    return !((Collection<Object>) right).contains(left);
             }
         } else if (right instanceof Map) {
             switch (operator) {
                 case "in":
-                    return ((Map) right).containsKey(left);
+                    return ((Map<Object, Object>) right).containsKey(left);
                 case "notin":
-                    return !((Map) right).containsKey(left);
+                    return !((Map<Object, Object>) right).containsKey(left);
             }
         } else if (right.getClass().isArray()) {
             int length = Array.getLength(right);
@@ -1609,7 +1609,7 @@ public final class Evaluator {
         return new ScriptError(token, "unknown operator: " + left + " " + operator + " " + right);
     }
 
-    private static String minPrecedence(Class left, Class right) {
+    private static String minPrecedence(Class<?> left, Class<?> right) {
         String l = left.getSimpleName();
         String r = right.getSimpleName();
         int pre1 = NumberType.valueOf(l).ordinal();
@@ -1628,7 +1628,7 @@ public final class Evaluator {
 
     private static Object setField(Token token, Object receiver, String name, Object value) {
         if (receiver instanceof ClassObject) {
-            Class clazz = ((ClassObject) receiver).getObject();
+            Class<?> clazz = ((ClassObject) receiver).getObject();
             try {
                 Field field = clazz.getField(name);
                 if (!isStatic(field)) {
@@ -1678,14 +1678,14 @@ public final class Evaluator {
                 return new ScriptError(token, "illegal access: " + name);
             }
         } else if (receiver instanceof Map) {
-            ((Map) receiver).put(name, value);
+            ((Map<Object, Object>) receiver).put(name, value);
             return value;
         } else if (receiver instanceof ConfigurationSection) {
             ((ConfigurationSection) receiver).set(name, value);
             return value;
         }
 
-        Class clazz = receiver.getClass();
+        Class<?> clazz = receiver.getClass();
         try {
             Field field = clazz.getField(name);
             if (!isAssignable(field.getType(), value)) {
@@ -1730,7 +1730,7 @@ public final class Evaluator {
 
     private static Object setUnsafeField(Token token, Object receiver, String name, Object value) {
         if (receiver instanceof ClassObject) {
-            Class clazz = ((ClassObject) receiver).getObject();
+            Class<?> clazz = ((ClassObject) receiver).getObject();
             try {
                 Field field = clazz.getDeclaredField(name);
                 if (!isStatic(field)) {
@@ -1780,14 +1780,14 @@ public final class Evaluator {
                 return new ScriptError(token, "illegal access: " + name);
             }
         } else if (receiver instanceof Map) {
-            ((Map) receiver).put(name, value);
+            ((Map<Object, Object>) receiver).put(name, value);
             return value;
         } else if (receiver instanceof ConfigurationSection) {
             ((ConfigurationSection) receiver).set(name, value);
             return value;
         }
 
-        Class clazz = receiver.getClass();
+        Class<?> clazz = receiver.getClass();
         try {
             Field field = clazz.getDeclaredField(name);
             if (!isAssignable(field.getType(), value)) {
@@ -1838,7 +1838,7 @@ public final class Evaluator {
         boolean mapOrSection = false;
 
         if (receiver instanceof ClassObject) {
-            Class clazz = ((ClassObject) receiver).getObject();
+            Class<?> clazz = ((ClassObject) receiver).getObject();
             if (member.equals("class")) {
                 return clazz;
             }
@@ -1899,7 +1899,7 @@ public final class Evaluator {
                 return new ScriptError(token, "internal error: " + errorName);
             }
         } else if (receiver instanceof Map) {
-            Map map = (Map) receiver;
+            Map<Object, Object> map = (Map<Object, Object>) receiver;
 
             if (map.containsKey(member)) {
                 return map.get(member);
@@ -1914,7 +1914,7 @@ public final class Evaluator {
             mapOrSection = true;
         }
 
-        Class clazz = receiver.getClass();
+        Class<?> clazz = receiver.getClass();
         String errorName = clazz.getSimpleName() + "." + member;
         try {
             Field field = clazz.getField(member);
@@ -1981,7 +1981,7 @@ public final class Evaluator {
         boolean mapOrSection = false;
 
         if (receiver instanceof ClassObject) {
-            Class clazz = ((ClassObject) receiver).getObject();
+            Class<?> clazz = ((ClassObject) receiver).getObject();
             if (member.equals("class")) {
                 return clazz;
             }
@@ -2042,7 +2042,7 @@ public final class Evaluator {
                 return new ScriptError(token, "internal error: " + errorName);
             }
         } else if (receiver instanceof Map) {
-            Map map = (Map) receiver;
+            Map<Object, Object> map = (Map<Object, Object>) receiver;
 
             if (map.containsKey(member)) {
                 return map.get(member);
@@ -2057,7 +2057,7 @@ public final class Evaluator {
             mapOrSection = true;
         }
 
-        Class clazz = receiver.getClass();
+        Class<?> clazz = receiver.getClass();
         String errorName = clazz.getSimpleName() + "." + member;
         try {
             Field field = clazz.getDeclaredField(member);
@@ -2128,7 +2128,7 @@ public final class Evaluator {
             throw new NoSuchMethodException();
         }
 
-        for (Constructor constructor : constructors) {
+        for (Constructor<?> constructor : constructors) {
             if (checkParameters(constructor, args)) {
                 if (!constructor.isAccessible()) {
                     constructor.setAccessible(true);
@@ -2141,7 +2141,7 @@ public final class Evaluator {
     }
 
     public static Object callMethod(ClassMethod method, Pair... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ArgumentMismatchException {
-        Class clazz = method.getReceiver();
+        Class<?> clazz = method.getReceiver();
         String name = method.getName();
 
         boolean found = false;
@@ -2266,7 +2266,7 @@ public final class Evaluator {
         }
 
         for (int i = 0; i < params.length; i++) {
-            Class param = params[i].getType();
+            Class<?> param = params[i].getType();
             if (params[i].isVarArgs()) {
                 for (int j = i; j < args.length; j++) {
                     Pair pair = args[j];
@@ -2296,7 +2296,7 @@ public final class Evaluator {
     }
 
     private static boolean checkParameters(BuiltinFunction function, Pair... args) {
-        Class[] params = function.getParameters();
+        Class<?>[] params = function.getParameters();
         if (function.isVarArgs()) {
             if (params.length - 1 > args.length) {
                 return false;
@@ -2306,12 +2306,12 @@ public final class Evaluator {
         }
 
         for (int i = 0; i < params.length; i++) {
-            Class param = params[i];
+            Class<?> param = params[i];
             if (i + 1 == params.length && function.isVarArgs()) {
                 for (int j = i; j < args.length; j++) {
                     Pair pair = args[j];
                     Object o = pair.getSecond();
-                    Class componentType = pair.getFirst().getClass().isArray() ? param.getComponentType() : param;
+                    Class<?> componentType = pair.getFirst().getClass().isArray() ? param.getComponentType() : param;
                     if (o != None.NONE) {
                         if (componentType != ((ClassObject) o).getObject()) {
                             return false;
@@ -2367,7 +2367,7 @@ public final class Evaluator {
                     return result;
                 }
 
-                Class type = params[i].getType();
+                Class<?> type = params[i].getType();
                 if (type.isAnnotationPresent(FunctionalInterface.class) || type == Consumer.class) {
                     if (values[i] instanceof Callable) {
                         Callable callable = (Callable) values[i];
@@ -2383,7 +2383,7 @@ public final class Evaluator {
         }
 
         for (int i = 0; i < params.length; i++) {
-            Class type = params[i].getType();
+            Class<?> type = params[i].getType();
             if (type.isAnnotationPresent(FunctionalInterface.class) || type == Consumer.class) {
                 if (values[i] instanceof Callable) {
                     Callable callable = (Callable) values[i];
@@ -2397,7 +2397,7 @@ public final class Evaluator {
 
     private static Object[] convertArgs(Token token, BuiltinFunction function, Pair... args) {
         Object[] values = Arrays.stream(args).map(Pair::getFirst).toArray();
-        Class[] params = function.getParameters();
+        Class<?>[] params = function.getParameters();
         if (function.isVarArgs()) {
             Object[] result = new Object[params.length];
 
@@ -2428,7 +2428,7 @@ public final class Evaluator {
                     return result;
                 }
 
-                Class type = params[i];
+                Class<?> type = params[i];
                 if (type.isAnnotationPresent(FunctionalInterface.class) || type == Consumer.class) {
                     if (values[i] instanceof Callable) {
                         Callable callable = (Callable) values[i];
@@ -2444,7 +2444,7 @@ public final class Evaluator {
         }
 
         for (int i = 0; i < params.length; i++) {
-            Class type = params[i];
+            Class<?> type = params[i];
             if (type.isAnnotationPresent(FunctionalInterface.class) || type == Consumer.class) {
                 if (values[i] instanceof Callable) {
                     Callable callable = (Callable) values[i];
@@ -2456,8 +2456,8 @@ public final class Evaluator {
         return values;
     }
 
-    private static Object autoCast(Class param, Object o) {
-        Class type = o.getClass();
+    private static Object autoCast(Class<?> param, Object o) {
+        Class<?> type = o.getClass();
 
         if (type == Byte.class) {
             if (param == Short.class || param == Integer.class || param == Long.class || param == Float.class || param == Double.class) {
@@ -2480,7 +2480,7 @@ public final class Evaluator {
         private Class<?> receiver;
         private String property;
 
-        private Property(Class receiver, String property) {
+        private Property(Class<?> receiver, String property) {
             this.receiver = receiver;
             this.property = property;
         }

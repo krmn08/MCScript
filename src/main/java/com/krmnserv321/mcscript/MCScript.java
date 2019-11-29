@@ -81,15 +81,10 @@ public final class MCScript extends JavaPlugin implements Listener {
                     try {
                         Field field = SimpleCommandMap.class.getDeclaredField("knownCommands");
                         field.setAccessible(true);
-                        Map knownCommands = (Map) field.get(commandMap);
-                        for (Iterator iterator = knownCommands.entrySet().iterator(); iterator.hasNext(); ) {
-                            Object o = iterator.next();
-                            Map.Entry entry = (Map.Entry) o;
-                            //noinspection SuspiciousMethodCalls
-                            if (commandSet.contains(entry.getValue())) {
-                                iterator.remove();
-                            }
-                        }
+                        //noinspection unchecked
+                        Map<Object, Object> knownCommands = (Map<Object, Object>) field.get(commandMap);
+                        //noinspection SuspiciousMethodCalls
+                        knownCommands.entrySet().removeIf(o -> commandSet.contains(o.getValue()));
                     } catch (NoSuchFieldException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
@@ -418,7 +413,7 @@ public final class MCScript extends JavaPlugin implements Listener {
         }
     }
 
-    private Set<Class> getBukkitClasses() throws UnsupportedEncodingException {
+    private Set<Class<?>> getBukkitClasses() throws UnsupportedEncodingException {
         String path = URLDecoder.decode(Bukkit.class.getResource("Bukkit.class").getPath(), "UTF-8");
         String jarPath = path.substring("file:/".length(), path.lastIndexOf("!"));
         ClassLoader loader = getClassLoader();
