@@ -295,7 +295,7 @@ public class Parser {
             try {
                 priority = EventPriority.valueOf(curToken.toString());
             } catch (IllegalArgumentException e) {
-                addError("not an event priority: " + curToken);
+                addError(curToken + " is not an event priority");
                 return null;
             }
             if (!expectPeek(TokenType.RParen)) {
@@ -554,7 +554,7 @@ public class Parser {
             PairLiteral pair = (PairLiteral) expression;
             map.put(pair.getFirst(), pair.getSecond());
         } else {
-            addError("not a pair: " + expression);
+            addError(expression + " is not a pair");
         }
         skipSemicolon();
 
@@ -567,7 +567,7 @@ public class Parser {
                 PairLiteral pair = (PairLiteral) exp;
                 map.put(pair.getFirst(), pair.getSecond());
             } else {
-                addError("not a pair: " + expression);
+                addError(expression + " is not a pair");
             }
         }
 
@@ -995,7 +995,7 @@ public class Parser {
 
         for (PairLiteral param : params) {
             if (!(param.getFirst() instanceof Identifier)) {
-                addError("not an identifier: " + param.getFirst());
+                addError(param.getFirst() + " is not an identifier");
                 return null;
             }
         }
@@ -1057,7 +1057,7 @@ public class Parser {
 
         for (PairLiteral param : params) {
             if (!(param.getFirst() instanceof Identifier)) {
-                addError("not an identifier: " + param.getFirst());
+                addError(param.getFirst() + " is not an identifier");
                 return null;
             }
         }
