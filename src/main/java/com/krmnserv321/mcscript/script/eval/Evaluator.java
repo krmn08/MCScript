@@ -76,7 +76,7 @@ public final class Evaluator {
                 return object;
             }
 
-            return new ScriptError(node.getToken(), "not an array: " + evaluated);
+            return new ScriptError(node.getToken(), evaluated + " is not an array");
         } else if (node instanceof BreakStatement) {
             return BREAK;
         } else if (node instanceof ContinueStatement) {
@@ -92,7 +92,7 @@ public final class Evaluator {
                 return new ScriptError(node.getToken(), (String) evaluated);
             }
 
-            return new ScriptError(node.getToken(), "not a string: " + evaluated);
+            return new ScriptError(node.getToken(), evaluated + " is not a string");
         } else if (node instanceof Literal) {
             return ((Literal) node).getValue();
         } else if (node instanceof MultiValueLiteral) {
@@ -246,7 +246,7 @@ public final class Evaluator {
                 return function;
             }
 
-            return new ScriptError(node.getToken(), "not a class: " + type);
+            return new ScriptError(node.getToken(), type + " is not a class");
         } else if (node instanceof FunctionDefinition) {
             FunctionDefinition fun = (FunctionDefinition) node;
             Arguments parameters = fun.getParameters();
@@ -325,7 +325,7 @@ public final class Evaluator {
                 return callable.call((Pair[]) args);
             }
 
-            return new ScriptError(node.getToken(), "not a function: " + fun);
+            return new ScriptError(node.getToken(), fun + " is not a function");
         } else if (node instanceof RunnableLiteral) {
             RunnableLiteral literal = (RunnableLiteral) node;
             Expression count = literal.getCount();
@@ -341,7 +341,7 @@ public final class Evaluator {
                     return new RunnableObject(new ScriptRunnable(function, ((Number) evaluated).intValue()));
                 }
 
-                return new ScriptError(node.getToken(), "not a number: " + evaluated);
+                return new ScriptError(node.getToken(), evaluated + " is not a number");
             }
 
             Function function = new Function(environment, literal.getBody());
@@ -378,7 +378,7 @@ public final class Evaluator {
                 }
                 environment.putConstant(name, evaluated);
             } else {
-                return new ScriptError(node.getToken(), "not a class: " + expression);
+                return new ScriptError(node.getToken(), expression + " is not class a");
             }
         } else if (node instanceof NullCheckExpression) {
             NullCheckExpression expression = (NullCheckExpression) node;
@@ -412,7 +412,7 @@ public final class Evaluator {
                 }
             }
 
-            return new ScriptError(node.getToken(), "not a boolean: " + condition);
+            return new ScriptError(node.getToken(), condition + " is not a boolean");
         } else if (node instanceof AccessExpression) {
             AccessExpression expression = (AccessExpression) node;
             Object le = eval(environment, expression.getLeft());
@@ -462,7 +462,7 @@ public final class Evaluator {
                     }
                 }
 
-                return new ScriptError(node.getToken(), "not an integer: " + ae);
+                return new ScriptError(node.getToken(), ae + " is not an integer");
             } else if (le instanceof String) {
                 CharSequence str = (CharSequence) le;
                 if (isNotFloatNumber(ae)) {
@@ -500,7 +500,7 @@ public final class Evaluator {
                     }
                 }
 
-                return new ScriptError(node.getToken(), "not an integer: " + ae);
+                return new ScriptError(node.getToken(), ae + " is not an integer");
             } else if (le instanceof Map) {
                 return ((Map<Object, Object>) le).get(ae);
             } else if (le instanceof ConfigurationSection) {
@@ -508,7 +508,7 @@ public final class Evaluator {
                     return ((ConfigurationSection) le).get((String) ae);
                 }
 
-                return new ScriptError(node.getToken(), "not a string: " + ae);
+                return new ScriptError(node.getToken(), ae + " is not a string");
             } else if (le != null && le.getClass().isArray()) {
                 if (isNotFloatNumber(ae)) {
                     int index = ((Number) ae).intValue();
@@ -518,7 +518,7 @@ public final class Evaluator {
                         return new ScriptError(node.getToken(), "index out of bounds: " + index);
                     }
                 }
-                return new ScriptError(node.getToken(), "not an integer: " + expression.getAccessor());
+                return new ScriptError(node.getToken(), expression.getAccessor() + " is not an integer");
             }
 
             return new ScriptError(node.getToken(), "cannot access: " + le);
@@ -578,7 +578,7 @@ public final class Evaluator {
                     return findMember(environment, infix.getToken(), le, r.getTokenLiteral());
                 }
 
-                return new ScriptError(infix.getToken(), "not an identifier: " + r);
+                return new ScriptError(infix.getToken(), r + " is not an identifier");
             }
 
             Object left = eval(environment, l);
@@ -671,7 +671,7 @@ public final class Evaluator {
                         break;
                     }
                 } else {
-                    return new ScriptError(statement.getToken(), "not a boolean: " + con);
+                    return new ScriptError(statement.getToken(), con + " is not a boolean");
                 }
 
                 Object evaluated = eval(enclosedEnv, statement.getBody());
@@ -803,7 +803,7 @@ public final class Evaluator {
             return NONE_OBJECT;
         }
 
-        return new ScriptError(statement.getToken(), "not an iterable: " + iterable);
+        return new ScriptError(statement.getToken(), iterable + " is not an iterable");
     }
 
     private static Object evalForStatement(Environment environment, ForStatement statement) {
@@ -823,7 +823,7 @@ public final class Evaluator {
                     break;
                 }
             } else {
-                return new ScriptError(statement.getToken(), "not a boolean: " + con);
+                return new ScriptError(statement.getToken(), con + " is not a boolean");
             }
 
             Object evaluated = eval(enclosedEnv, statement.getBody());
@@ -932,7 +932,7 @@ public final class Evaluator {
                             return eval(enclosedEnv, exp.getConsequence());
                         }
                     } else {
-                        return new ScriptError(expression.getToken(), "not a boolean: " + o);
+                        return new ScriptError(expression.getToken(), o + " is not a boolean");
                     }
                 }
 
@@ -942,7 +942,7 @@ public final class Evaluator {
                 }
             }
         } else {
-            return new ScriptError(expression.getToken(), "not a boolean: " + con);
+            return new ScriptError(expression.getToken(), con + " is not a boolean");
         }
 
         return NONE_OBJECT;
@@ -970,7 +970,7 @@ public final class Evaluator {
                 if (first instanceof Identifier) {
                     result[i] = new Pair(first, right);
                 } else {
-                    return new ScriptError(pair.getToken(), "not an identifier: " + first);
+                    return new ScriptError(pair.getToken(), first + " is not an identifier");
                 }
             }
         }
@@ -1022,7 +1022,7 @@ public final class Evaluator {
                         result.add(new Pair(left, right));
                     }
                 } else {
-                    return new ScriptError(expression.getToken(), "not a class: " + right);
+                    return new ScriptError(expression.getToken(), right + " is not a class");
                 }
             }
         }
@@ -1378,7 +1378,7 @@ public final class Evaluator {
                         }
                     }
 
-                    return new ScriptError(token, "not an integer: " + access.getAccessor());
+                    return new ScriptError(token, access.getAccessor() + " is not an integer");
                 } else if (le instanceof Map) {
                     ((Map<Object, Object>) le).put(ae, right);
                     return right;
@@ -1388,7 +1388,7 @@ public final class Evaluator {
                         return right;
                     }
 
-                    return new ScriptError(token, "not a string: " + access.getAccessor());
+                    return new ScriptError(token, access.getAccessor() + " is not a string");
                 } else if (le != null && le.getClass().isArray()) {
                     if (isNotFloatNumber(ae)) {
                         int index = ((Number) ae).intValue();
@@ -1399,13 +1399,13 @@ public final class Evaluator {
                             return new ScriptError(token, "index out of bounds: " + index);
                         }
                     }
-                    return new ScriptError(token, "not an integer: " + ae);
+                    return new ScriptError(token, ae + " is not an integer");
                 }
 
                 return new ScriptError(token, "cannot access: " + access.getLeft());
             }
 
-            return new ScriptError(token, "not an identifier: " + name);
+            return new ScriptError(token, name + " is not an identifier");
         }
 
         Object left = eval(environment, name);
