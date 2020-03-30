@@ -208,7 +208,7 @@ public final class Builtin {
         addFunction(new BuiltinFunction("Int", Character.class) {
             @Override
             public Integer call(FunctionArguments args) {
-                Character character = args.get(0);
+                char character = args.get(0);
                 return (int) character;
             }
         });
