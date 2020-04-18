@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VarArgObject {
-    private List<Object> arguments = new ArrayList<>();
+    private final List<Object> arguments = new ArrayList<>();
 
     List<Object> getArguments() {
         return arguments;

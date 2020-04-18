@@ -3,7 +3,7 @@ package com.krmnserv321.mcscript.script.java;
 import com.krmnserv321.mcscript.script.eval.ScriptError;
 
 public class ErrorObject {
-    private ScriptError error;
+    private final ScriptError error;
 
     public ErrorObject(ScriptError error) {
         this.error = error;

@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 public class RunnableObject {
     private static final Plugin PLUGIN = MCScript.getInstance();
-    private ScriptRunnable runnable;
+    private final ScriptRunnable runnable;
 
     public RunnableObject(ScriptRunnable runnable) {
         this.runnable = runnable;

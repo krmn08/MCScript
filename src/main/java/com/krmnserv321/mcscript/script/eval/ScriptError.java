@@ -3,8 +3,8 @@ package com.krmnserv321.mcscript.script.eval;
 import com.krmnserv321.mcscript.script.ast.Token;
 
 public class ScriptError {
-    private Token token;
-    private String message;
+    private final Token token;
+    private final String message;
 
     public ScriptError(Token token, String message) {
         this.token = token;

@@ -49,20 +49,20 @@ public final class MCScript extends JavaPlugin implements Listener {
     private static final String SCRIPT_PATH = "plugins/MCScript/script/";
     private static final String SEPARATOR = System.lineSeparator();
 
-    private static Map<String, String> defineMap = new LinkedHashMap<>();
+    private static final Map<String, String> defineMap = new LinkedHashMap<>();
 
-    private static Set<Player> replSet = new HashSet<>();
-    private static Map<Player, String> scriptMap = new HashMap<>();
-    private static Map<Player, Environment> environmentMap = new HashMap<>();
+    private static final Set<Player> replSet = new HashSet<>();
+    private static final Map<Player, String> scriptMap = new HashMap<>();
+    private static final Map<Player, Environment> environmentMap = new HashMap<>();
 
-    private static Set<Command> commandSet = new HashSet<>();
+    private static final Set<Command> commandSet = new HashSet<>();
 
     private static Environment commandEnvironment;
 
     private static MCScript instance;
 
-    private Pattern MACRO_PATTERN = Pattern.compile("\\w+?(\\(.+?\\))?");
-    private Pattern PAREN_PATTERN = Pattern.compile("\\(.+?\\)");
+    private final Pattern MACRO_PATTERN = Pattern.compile("\\w+?(\\(.+?\\))?");
+    private final Pattern PAREN_PATTERN = Pattern.compile("\\(.+?\\)");
 
     @Override
     public void onEnable() {
@@ -105,11 +105,7 @@ public final class MCScript extends JavaPlugin implements Listener {
                                 return true;
                             }
                         } else {
-                            if (replSet.contains(sender)) {
-                                repl(player, false);
-                            } else {
-                                repl(player, true);
-                            }
+                            repl(player, !replSet.contains(sender));
 
                             return true;
                         }

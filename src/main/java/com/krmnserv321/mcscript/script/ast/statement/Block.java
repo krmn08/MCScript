@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Block extends Statement {
-    private List<Statement> statements = new ArrayList<>();
+    private final List<Statement> statements = new ArrayList<>();
 
     public Block(Token token) {
         super(token);

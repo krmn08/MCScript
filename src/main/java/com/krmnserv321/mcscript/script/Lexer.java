@@ -115,7 +115,7 @@ public class Lexer {
     private static final Token FLOAT_CLASS = new Token(TokenType.FloatClass, "float");
     private static final Token DOUBLE_CLASS = new Token(TokenType.DoubleClass, "double");
 
-    private static Token[] TOKENS = {
+    private static final Token[] TOKENS = {
             ASSIGN,
             PLUS,
             MINUS,
@@ -149,7 +149,7 @@ public class Lexer {
             R_BRACKET
     };
 
-    private static Token[] KEYWORDS = {
+    private static final Token[] KEYWORDS = {
             RUNNABLE,
 
             CONSTANT,
@@ -193,7 +193,7 @@ public class Lexer {
             DOUBLE_CLASS
     };
 
-    private static Map<Character, Character> escapeMap = new HashMap<Character, Character>() {
+    private static final Map<Character, Character> escapeMap = new HashMap<Character, Character>() {
         {
             put('t', '\t');
             put('b', '\b');
@@ -206,7 +206,7 @@ public class Lexer {
     };
 
     private String path = "";
-    private String input;
+    private final String input;
     private int pos;
     private int readPos;
     private int lineCount = 1;

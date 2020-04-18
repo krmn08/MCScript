@@ -9,11 +9,11 @@ import java.util.Stack;
 public class Environment {
     private static final NullObject NULL = new NullObject();
 
-    private PublicEnvironment publicEnvironment;
+    private final PublicEnvironment publicEnvironment;
     private Environment outer;
 
-    private Map<String, Object> storeMap = new HashMap<>();
-    private Map<String, Object> constMap = new HashMap<>();
+    private final Map<String, Object> storeMap = new HashMap<>();
+    private final Map<String, Object> constMap = new HashMap<>();
 
     private Stack<DeferObject> deferStack;
 

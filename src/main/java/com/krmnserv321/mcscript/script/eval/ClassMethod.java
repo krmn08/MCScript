@@ -8,9 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class ClassMethod extends JavaCallable {
-    private Class<?> receiver;
-    private String name;
-    private boolean unsafe;
+    private final Class<?> receiver;
+    private final String name;
+    private final boolean unsafe;
 
     public ClassMethod(Class<?> receiver, String name, boolean unsafe) {
         this.receiver = receiver;

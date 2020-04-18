@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class EventAdapter implements Listener {
-    private static Map<String, EnumMap<EventPriority, EventList>> eventMap = new HashMap<>();
+    private static final Map<String, EnumMap<EventPriority, EventList>> eventMap = new HashMap<>();
 
-    private static RegisteredListener LOWEST_LISTENER;
-    private static RegisteredListener LOW_LISTENER;
-    private static RegisteredListener NORMAL_LISTENER;
-    private static RegisteredListener HIGH_LISTENER;
-    private static RegisteredListener HIGHEST_LISTENER;
-    private static RegisteredListener MONITOR_LISTENER;
+    private static final RegisteredListener LOWEST_LISTENER;
+    private static final RegisteredListener LOW_LISTENER;
+    private static final RegisteredListener NORMAL_LISTENER;
+    private static final RegisteredListener HIGH_LISTENER;
+    private static final RegisteredListener HIGHEST_LISTENER;
+    private static final RegisteredListener MONITOR_LISTENER;
 
     static {
         EventAdapter adapter = new EventAdapter();

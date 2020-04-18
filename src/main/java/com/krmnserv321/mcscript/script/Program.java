@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Program extends Node {
-    private List<Statement> statements = new ArrayList<>();
+    private final List<Statement> statements = new ArrayList<>();
 
     public Program() {
         super(new Token(TokenType.Root, "root"));

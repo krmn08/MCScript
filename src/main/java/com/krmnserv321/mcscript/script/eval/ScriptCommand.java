@@ -5,8 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 
 class ScriptCommand extends BukkitCommand {
-    private boolean isVarArgs;
-    private Function function;
+    private final boolean isVarArgs;
+    private final Function function;
 
     ScriptCommand(String name, boolean isVarArgs, Function function) {
         super(name);

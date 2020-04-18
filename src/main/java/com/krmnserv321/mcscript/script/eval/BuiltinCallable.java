@@ -6,7 +6,7 @@ import com.krmnserv321.mcscript.script.java.Pair;
 import java.util.Arrays;
 
 class BuiltinCallable extends JavaCallable {
-    private String name;
+    private final String name;
 
     BuiltinCallable(String name) {
         this.name = name;

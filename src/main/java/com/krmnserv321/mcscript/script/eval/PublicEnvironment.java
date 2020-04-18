@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PublicEnvironment {
-    private ClassLoader loader;
+    private final ClassLoader loader;
 
-    private Map<String, Object> storeMap = new HashMap<>();
-    private Map<Class<?>, Map<String, Function>> extensionMap = new HashMap<>();
+    private final Map<String, Object> storeMap = new HashMap<>();
+    private final Map<Class<?>, Map<String, Function>> extensionMap = new HashMap<>();
 
     public PublicEnvironment(ClassLoader loader) {
         this.loader = loader;

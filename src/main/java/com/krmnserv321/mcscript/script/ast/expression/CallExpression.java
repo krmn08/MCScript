@@ -5,7 +5,7 @@ import com.krmnserv321.mcscript.script.ast.Token;
 
 public class CallExpression extends Expression {
     private Expression function;
-    private Arguments arguments = new Arguments();
+    private final Arguments arguments = new Arguments();
 
     public CallExpression(Token token, Expression function) {
         super(token);

@@ -6,7 +6,7 @@ import com.krmnserv321.mcscript.script.ast.statement.Block;
 import com.krmnserv321.mcscript.script.ast.statement.Statement;
 
 public class FunctionLiteral extends Expression {
-    private Arguments parameters = new Arguments();
+    private final Arguments parameters = new Arguments();
     private Statement body;
 
     public FunctionLiteral(Token token, Statement body) {

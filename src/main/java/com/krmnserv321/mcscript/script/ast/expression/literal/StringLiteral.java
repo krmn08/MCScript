@@ -3,7 +3,7 @@ package com.krmnserv321.mcscript.script.ast.expression.literal;
 import com.krmnserv321.mcscript.script.ast.Token;
 
 public class StringLiteral extends Literal {
-    private String value;
+    private final String value;
 
     public StringLiteral(Token token, String value) {
         super(token);

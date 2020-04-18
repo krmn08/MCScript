@@ -10,7 +10,7 @@ public class IfExpression extends Expression {
     private Expression condition;
     private Statement consequence;
 
-    private List<IfExpression> elifList = new ArrayList<>();
+    private final List<IfExpression> elifList = new ArrayList<>();
 
     private Statement alternative;
 

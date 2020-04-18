@@ -7,7 +7,7 @@ import com.krmnserv321.mcscript.script.eval.Function;
 import org.bukkit.event.EventPriority;
 
 public class EventFunction extends Function {
-    private EventPriority priority;
+    private final EventPriority priority;
 
     public EventFunction(Environment environment, Token token, EventPriority priority, Block body) {
         super(environment, body);

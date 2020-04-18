@@ -8,8 +8,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class CallableMethod extends JavaCallable {
-    private Object receiver;
-    private Method method;
+    private final Object receiver;
+    private final Method method;
 
     CallableMethod(Object receiver, Method method) {
         this.receiver = receiver;

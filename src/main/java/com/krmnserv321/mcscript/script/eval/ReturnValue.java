@@ -1,7 +1,7 @@
 package com.krmnserv321.mcscript.script.eval;
 
 class ReturnValue {
-    private Object value;
+    private final Object value;
 
     ReturnValue(Object value) {
         this.value = value;

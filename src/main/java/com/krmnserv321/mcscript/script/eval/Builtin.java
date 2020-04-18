@@ -15,7 +15,7 @@ import static com.krmnserv321.mcscript.script.eval.EvalUtils.toProperty;
 import static com.krmnserv321.mcscript.script.eval.Evaluator.NONE_OBJECT;
 
 public final class Builtin {
-    private static Map<String, List<BuiltinFunction>> builtinMap = new HashMap<>();
+    private static final Map<String, List<BuiltinFunction>> builtinMap = new HashMap<>();
 
     private static int iota = 0;
 

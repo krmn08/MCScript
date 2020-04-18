@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 class ClassObject extends JavaCallable {
-    private Class<?> object;
+    private final Class<?> object;
     private boolean unsafe;
 
     private ClassObject(Class<?> object) {

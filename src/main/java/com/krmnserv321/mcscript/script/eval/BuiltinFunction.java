@@ -1,9 +1,9 @@
 package com.krmnserv321.mcscript.script.eval;
 
 public abstract class BuiltinFunction {
-    private String name;
-    private boolean varArgs;
-    private Class<?>[] parameters;
+    private final String name;
+    private final boolean varArgs;
+    private final Class<?>[] parameters;
 
     public BuiltinFunction(String name, Class<?>... parameters) {
         this(name, false, parameters);

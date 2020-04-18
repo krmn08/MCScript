@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListLiteral extends Expression {
-    private List<Expression> elements = new ArrayList<>();
+    private final List<Expression> elements = new ArrayList<>();
 
     public ListLiteral(Token token) {
         super(token);

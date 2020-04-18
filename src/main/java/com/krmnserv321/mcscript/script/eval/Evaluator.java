@@ -2477,8 +2477,8 @@ public final class Evaluator {
     }
 
     private static class Property {
-        private Class<?> receiver;
-        private String property;
+        private final Class<?> receiver;
+        private final String property;
 
         private Property(Class<?> receiver, String property) {
             this.receiver = receiver;
@@ -2487,16 +2487,18 @@ public final class Evaluator {
 
         private Method getReadMethod() throws NoSuchMethodException {
             for (Method method : receiver.getMethods()) {
-                String name = method.getName();
-                if (name.startsWith("is")) {
-                    if (toProperty(name.substring(2)).equals(property)) {
-                        return method;
+                if (method.getParameterCount() == 0) {
+                    String name = method.getName();
+                    if (name.startsWith("is")) {
+                        if (toProperty(name.substring(2)).equals(property)) {
+                            return method;
+                        }
                     }
-                }
 
-                if (name.startsWith("get")) {
-                    if (toProperty(name.substring(3)).equals(property)) {
-                        return method;
+                    if (name.startsWith("get")) {
+                        if (toProperty(name.substring(3)).equals(property)) {
+                            return method;
+                        }
                     }
                 }
             }
@@ -2506,16 +2508,18 @@ public final class Evaluator {
 
         private Method getDeclaredReadMethod() throws NoSuchMethodException {
             for (Method method : receiver.getDeclaredMethods()) {
-                String name = method.getName();
-                if (name.startsWith("is")) {
-                    if (toProperty(name.substring(2)).equals(property)) {
-                        return method;
+                if (method.getParameterCount() == 0) {
+                    String name = method.getName();
+                    if (name.startsWith("is")) {
+                        if (toProperty(name.substring(2)).equals(property)) {
+                            return method;
+                        }
                     }
-                }
 
-                if (name.startsWith("get")) {
-                    if (toProperty(name.substring(3)).equals(property)) {
-                        return method;
+                    if (name.startsWith("get")) {
+                        if (toProperty(name.substring(3)).equals(property)) {
+                            return method;
+                        }
                     }
                 }
             }
@@ -2525,10 +2529,12 @@ public final class Evaluator {
 
         private Method getWriteMethod() throws NoSuchMethodException {
             for (Method method : receiver.getMethods()) {
-                String name = method.getName();
-                if (name.startsWith("set")) {
-                    if (toProperty(name.substring(3)).equals(property)) {
-                        return method;
+                if (method.getParameterCount() == 1) {
+                    String name = method.getName();
+                    if (name.startsWith("set")) {
+                        if (toProperty(name.substring(3)).equals(property)) {
+                            return method;
+                        }
                     }
                 }
             }
@@ -2538,10 +2544,12 @@ public final class Evaluator {
 
         private Method getDeclaredWriteMethod() throws NoSuchMethodException {
             for (Method method : receiver.getDeclaredMethods()) {
-                String name = method.getName();
-                if (name.startsWith("set")) {
-                    if (toProperty(name.substring(3)).equals(property)) {
-                        return method;
+                if (method.getParameterCount() == 1) {
+                    String name = method.getName();
+                    if (name.startsWith("set")) {
+                        if (toProperty(name.substring(3)).equals(property)) {
+                            return method;
+                        }
                     }
                 }
             }

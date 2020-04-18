@@ -1,7 +1,7 @@
 package com.krmnserv321.mcscript.script.eval;
 
 class FunctionArguments {
-    private Object[] args;
+    private final Object[] args;
 
     FunctionArguments(Object... args) {
         this.args = args;

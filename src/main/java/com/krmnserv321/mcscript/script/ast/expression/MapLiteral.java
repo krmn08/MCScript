@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MapLiteral extends Expression {
-    private Map<Expression, Expression> map = new LinkedHashMap<>();
+    private final Map<Expression, Expression> map = new LinkedHashMap<>();
 
     public MapLiteral(Token token) {
         super(token);

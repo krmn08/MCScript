@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringExpression extends Expression {
-    private List<Expression> expressions = new ArrayList<>();
+    private final List<Expression> expressions = new ArrayList<>();
 
     public StringExpression(Token token) {
         super(token);

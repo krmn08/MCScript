@@ -8,10 +8,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 class InstanceMethod extends JavaCallable {
-    private PublicEnvironment publicEnvironment;
-    private Object receiver;
-    private String fieldName;
-    private boolean unsafe;
+    private final PublicEnvironment publicEnvironment;
+    private final Object receiver;
+    private final String fieldName;
+    private final boolean unsafe;
 
     InstanceMethod(PublicEnvironment publicEnvironment, Object receiver, String fieldName, boolean unsafe) {
         this.publicEnvironment = publicEnvironment;

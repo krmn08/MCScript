@@ -5,7 +5,7 @@ import com.krmnserv321.mcscript.script.eval.Evaluator;
 
 public abstract class Node {
 
-    private Token token;
+    private final Token token;
 
     public Node(Token token) {
         this.token = token;

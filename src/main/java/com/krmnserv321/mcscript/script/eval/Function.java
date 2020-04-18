@@ -8,9 +8,9 @@ import com.krmnserv321.mcscript.script.java.Pair;
 public class Function extends ScriptCallable {
     private Environment environment;
 
-    private Arguments parameters = new Arguments();
-    private Statement body;
-    private boolean lambda;
+    private final Arguments parameters = new Arguments();
+    private final Statement body;
+    private final boolean lambda;
 
     public Function(Environment environment, Statement body) {
         this(environment, body, false);

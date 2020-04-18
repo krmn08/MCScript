@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private static Map<TokenType, Precedence> precedenceMap = new HashMap<TokenType, Precedence>() {
+    private static final Map<TokenType, Precedence> precedenceMap = new HashMap<TokenType, Precedence>() {
         {
             put(TokenType.Assign, Precedence.Assign);
             put(TokenType.ColonAssign, Precedence.Assign);
@@ -71,18 +71,18 @@ public class Parser {
         }
     };
 
-    private static Pattern TEMPLATE_PATTERN = Pattern.compile("\\{.+?}");
-    private static Pattern IDENTITY_PATTERN = Pattern.compile("[a-zA-Z]+[a-zA-Z0-9_]*");
+    private static final Pattern TEMPLATE_PATTERN = Pattern.compile("\\{.+?}");
+    private static final Pattern IDENTITY_PATTERN = Pattern.compile("[a-zA-Z]+[a-zA-Z0-9_]*");
 
-    private Lexer lexer;
+    private final Lexer lexer;
 
     private Token curToken;
     private Token peekToken;
 
-    private List<String> errors = new ArrayList<>();
+    private final List<String> errors = new ArrayList<>();
 
-    private Map<TokenType, PrefixParseFunction> prefixParseMap = new HashMap<>();
-    private Map<TokenType, InfixParseFunction> infixParseMap = new HashMap<>();
+    private final Map<TokenType, PrefixParseFunction> prefixParseMap = new HashMap<>();
+    private final Map<TokenType, InfixParseFunction> infixParseMap = new HashMap<>();
 
     public Parser(Lexer lexer) {
         this.lexer = lexer;

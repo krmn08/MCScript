@@ -3,8 +3,8 @@ package com.krmnserv321.mcscript.script.ast;
 public class Token implements Cloneable {
     private String path = "";
     private int lineNumber;
-    private TokenType type;
-    private String literal;
+    private final TokenType type;
+    private final String literal;
 
     public Token(TokenType type, String literal) {
         this.type = type;

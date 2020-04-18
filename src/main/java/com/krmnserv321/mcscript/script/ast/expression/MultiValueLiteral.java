@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MultiValueLiteral extends Expression {
-    private List<Expression> elements = new ArrayList<>();
+    private final List<Expression> elements = new ArrayList<>();
 
     public MultiValueLiteral(Token token) {
         super(token);

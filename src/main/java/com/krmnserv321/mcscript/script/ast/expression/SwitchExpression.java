@@ -9,7 +9,7 @@ import java.util.Map;
 public class SwitchExpression extends Expression {
     private Expression value;
 
-    private Map<Expression, Statement> caseMap = new LinkedHashMap<>();
+    private final Map<Expression, Statement> caseMap = new LinkedHashMap<>();
 
     public SwitchExpression(Token token, Expression value) {
         super(token);

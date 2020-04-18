@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ScriptRunnable extends BukkitRunnable {
-    private Function function;
+    private final Function function;
     private int count;
 
     ScriptRunnable(Function function, int count) {
