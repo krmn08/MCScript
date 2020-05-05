@@ -73,7 +73,7 @@ public final class MCScript extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (label.equalsIgnoreCase("mcs")) {
+        if (label.equalsIgnoreCase("mcs") && command.testPermission(sender)) {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("reload")) {
                     SimpleCommandMap commandMap = Reflection.getCommandMap();
