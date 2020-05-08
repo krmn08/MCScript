@@ -65,7 +65,7 @@ public class PublicEnvironment {
         extensionMap.get(type).put(name, function);
     }
 
-    private Map<String, Function> getExtensionMap(Class<?> type) {
+    public Map<String, Function> getExtensionMap(Class<?> type) {
         for (Class<?> c : extensionMap.keySet()) {
             if (c.isAssignableFrom(type)) {
                 return extensionMap.get(c);
@@ -81,5 +81,13 @@ public class PublicEnvironment {
 
     public ClassLoader getClassLoader() {
         return loader;
+    }
+
+    public Map<String, Object> getStoreMap() {
+        return storeMap;
+    }
+
+    public Map<Class<?>, Map<String, Function>> getExtensionMap() {
+        return extensionMap;
     }
 }

@@ -220,7 +220,7 @@ public final class Evaluator {
         } else if (node instanceof CommandDefinition) {
             CommandDefinition definition = (CommandDefinition) node;
             String name = definition.getName().toString();
-            Function function = new Function(environment, definition.getBody());
+            Function function = new Function(environment, null, definition.getBody());
             function.getParameters().addAll(definition.getParameters());
             function.setToken(node.getToken());
             ScriptCommand command = new ScriptCommand(name, definition.isVarArgs(), function);
@@ -239,19 +239,54 @@ public final class Evaluator {
             if (type instanceof ClassObject) {
                 PublicEnvironment publicEnvironment = environment.getPublicEnvironment();
 
-                Function function = new Function(environment, statement.getBody());
-                function.getParameters().addAll(statement.getParameters());
-                publicEnvironment.putExtension(((ClassObject) type).getObject(), statement.getExtension().toString(), function);
+                Identifier returnType = statement.getReturnType();
+                if (returnType == null) {
+                    Function function = new Function(environment, null, statement.getBody());
+                    function.getParameters().addAll(statement.getParameters());
+                    publicEnvironment.putExtension(((ClassObject) type).getObject(), statement.getExtension().toString(), function);
 
-                return function;
+                    return function;
+                } else {
+                    Object evaluated = eval(environment, returnType);
+                    if (isError(evaluated)) {
+                        return evaluated;
+                    }
+
+                    if (evaluated instanceof ClassObject) {
+                        Function function = new Function(environment, ((ClassObject) evaluated).getObject(), statement.getBody());
+                        function.getParameters().addAll(statement.getParameters());
+                        publicEnvironment.putExtension(((ClassObject) type).getObject(), statement.getExtension().toString(), function);
+
+                        return function;
+                    } else {
+                        return new ScriptError(node.getToken(), evaluated + " is not a type");
+                    }
+                }
             }
 
-            return new ScriptError(node.getToken(), type + " is not a class");
+            return new ScriptError(node.getToken(), type + " is not a type");
         } else if (node instanceof FunctionDefinition) {
             FunctionDefinition fun = (FunctionDefinition) node;
             Arguments parameters = fun.getParameters();
             Statement body = fun.getBody();
-            Function function = new Function(environment, body);
+
+            Function function;
+
+            Identifier returnType = fun.getReturnType();
+            if (returnType == null) {
+                function = new Function(environment, null, body);
+            } else {
+                Object evaluated = eval(environment, returnType);
+                if (isError(evaluated)) {
+                    return evaluated;
+                }
+
+                if (evaluated instanceof ClassObject) {
+                    function = new Function(environment, ((ClassObject) evaluated).getObject(), body);
+                } else {
+                    return new ScriptError(node.getToken(), evaluated + " is not a type");
+                }
+            }
             function.getParameters().addAll(parameters);
 
             String name = fun.getName().toString();
@@ -274,7 +309,7 @@ public final class Evaluator {
             FunctionLiteral fun = (FunctionLiteral) node;
             Arguments parameters = fun.getParameters();
             Statement body = fun.getBody();
-            Function function = new Function(environment, body, fun instanceof LambdaExpression);
+            Function function = new Function(environment, null, body, fun instanceof LambdaExpression);
             function.getParameters().addAll(parameters);
             return function;
         } else if (node instanceof EventStatement) {
@@ -336,7 +371,7 @@ public final class Evaluator {
                 }
 
                 if (evaluated instanceof Number) {
-                    Function function = new Function(environment, literal.getBody());
+                    Function function = new Function(environment, null, literal.getBody());
                     function.setToken(node.getToken());
                     return new RunnableObject(new ScriptRunnable(function, ((Number) evaluated).intValue()));
                 }
@@ -344,7 +379,7 @@ public final class Evaluator {
                 return new ScriptError(node.getToken(), evaluated + " is not a number");
             }
 
-            Function function = new Function(environment, literal.getBody());
+            Function function = new Function(environment, null, literal.getBody());
             function.setToken(node.getToken());
             return new RunnableObject(new ScriptRunnable(function, -1));
         } else if (node instanceof AssignExpression) {
@@ -1022,7 +1057,7 @@ public final class Evaluator {
                         result.add(new Pair(left, right));
                     }
                 } else {
-                    return new ScriptError(expression.getToken(), right + " is not a class");
+                    return new ScriptError(expression.getToken(), right + " is not a type");
                 }
             }
         }
@@ -1178,41 +1213,35 @@ public final class Evaluator {
                     if (":".equals(operator)) {
                         for (int i = 0; i < leftSize; i++) {
                             Expression l = left.get(i);
+                            Object assign;
                             if (i < rightSize) {
-                                Object assign = assign(environment, token, operator, l, right.get(i));
-                                if (isError(assign)) {
-                                    return assign;
-                                }
+                                assign = assign(environment, token, operator, l, right.get(i));
 
-                                ret[i] = assign;
                             } else {
-                                Object assign = assign(environment, token, operator, l, lastExp);
-                                if (isError(assign)) {
-                                    return assign;
-                                }
+                                assign = assign(environment, token, operator, l, lastExp);
 
-                                ret[i] = assign;
                             }
+                            if (isError(assign)) {
+                                return assign;
+                            }
+
+                            ret[i] = assign;
                         }
                     } else {
                         Object last = eval(environment, lastExp);
                         for (int i = 0; i < leftSize; i++) {
                             Expression l = left.get(i);
+                            Object assign;
                             if (i < rightSize - 1) {
-                                Object assign = assign(environment, token, operator, l, right.get(i));
-                                if (isError(assign)) {
-                                    return assign;
-                                }
-
-                                ret[i] = assign;
+                                assign = assign(environment, token, operator, l, right.get(i));
                             } else {
-                                Object assign = assign(environment, token, operator, l, last);
-                                if (isError(assign)) {
-                                    return assign;
-                                }
-
-                                ret[i] = assign;
+                                assign = assign(environment, token, operator, l, last);
                             }
+                            if (isError(assign)) {
+                                return assign;
+                            }
+
+                            ret[i] = assign;
                         }
                     }
                 } else {
@@ -1238,21 +1267,17 @@ public final class Evaluator {
                     if (leftSize > rightSize) {
                         Object last = elements[rightSize - 1];
                         for (int i = 0; i < leftSize; i++) {
+                            Object assign;
                             if (i < rightSize - 1) {
-                                Object assign = assign(environment, token, operator, left.get(i), elements[i]);
-                                if (isError(assign)) {
-                                    return assign;
-                                }
-
-                                ret[i] = assign;
+                                assign = assign(environment, token, operator, left.get(i), elements[i]);
                             } else {
-                                Object assign = assign(environment, token, operator, left.get(i), last);
-                                if (isError(assign)) {
-                                    return assign;
-                                }
-
-                                ret[i] = assign;
+                                assign = assign(environment, token, operator, left.get(i), last);
                             }
+                            if (isError(assign)) {
+                                return assign;
+                            }
+
+                            ret[i] = assign;
                         }
                     } else {
                         for (int i = 0; i < leftSize; i++) {
@@ -1936,7 +1961,8 @@ public final class Evaluator {
                 PublicEnvironment publicEnvironment = environment.getPublicEnvironment();
                 Function extension = publicEnvironment.getExtension(clazz, member);
                 if (extension != null) {
-                    return new InstanceMethod(publicEnvironment, receiver, member, false);
+                    extension.getEnvironment().putConstant("this", receiver);
+                    return extension;
                 }
 
                 int count = 0;
@@ -2079,7 +2105,8 @@ public final class Evaluator {
                 PublicEnvironment publicEnvironment = environment.getPublicEnvironment();
                 Function extension = publicEnvironment.getExtension(clazz, member);
                 if (extension != null) {
-                    return new InstanceMethod(publicEnvironment, receiver, member, true);
+                    extension.getEnvironment().putConstant("this", receiver);
+                    return extension;
                 }
 
                 int count = 0;
@@ -2178,24 +2205,11 @@ public final class Evaluator {
 
     public static Object callMethod(InstanceMethod method, Pair... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ArgumentMismatchException {
         Object receiver = method.getReceiver();
-        String name = method.getFieldName();
+        String name = method.getName();
 
         Class<?> type = receiver.getClass();
-        PublicEnvironment publicEnvironment = method.getPublicEnvironment();
-
-        Function extension = publicEnvironment.getExtension(type, name);
-        if (extension != null) {
-            Environment environment = newEnclosedEnvironment(extension.getEnvironment());
-            environment.putConstant("this", receiver);
-            extension.setEnvironment(environment);
-
-            return extension.call(args);
-        }
-
         boolean found = false;
-
         Method[] methods = method.isUnsafe() ? type.getDeclaredMethods() : type.getMethods();
-
         for (Method m : methods) {
             if (!m.getName().equals(name)) {
                 continue;
@@ -2490,7 +2504,7 @@ public final class Evaluator {
                 if (method.getParameterCount() == 0) {
                     String name = method.getName();
                     if (name.startsWith("is")) {
-                        if (toProperty(name.substring(2)).equals(property)) {
+                        if (name.equals(property)) {
                             return method;
                         }
                     }
@@ -2511,7 +2525,7 @@ public final class Evaluator {
                 if (method.getParameterCount() == 0) {
                     String name = method.getName();
                     if (name.startsWith("is")) {
-                        if (toProperty(name.substring(2)).equals(property)) {
+                        if (name.equals(property)) {
                             return method;
                         }
                     }

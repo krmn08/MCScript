@@ -1000,27 +1000,26 @@ public class Parser {
             }
         }
 
-        Statement statement;
+        Identifier returnType = null;
         if (peekToken.getType() == TokenType.Colon) {
             nextToken();
             nextToken();
-            statement = parseStatement();
-        } else {
-            if (!expectPeek(TokenType.LBrace)) {
-                return null;
-            }
-
-            statement = parseBlock();
+            returnType = parseIdentifier();
         }
+
+        if (!expectPeek(TokenType.LBrace)) {
+            return null;
+        }
+        Statement statement = parseBlock();
 
         FunctionLiteral function;
         if (name == null) {
             function = new FunctionLiteral(token, statement);
         } else {
             if (ext == null) {
-                function = new FunctionDefinition(token, name, statement);
+                function = new FunctionDefinition(token, name, returnType, statement);
             } else {
-                function = new ExtensionDefinition(token, name, ext, statement);
+                function = new ExtensionDefinition(token, name, ext, returnType, statement);
             }
         }
 

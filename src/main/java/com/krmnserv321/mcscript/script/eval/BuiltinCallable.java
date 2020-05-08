@@ -5,14 +5,14 @@ import com.krmnserv321.mcscript.script.java.Pair;
 
 import java.util.Arrays;
 
-class BuiltinCallable extends JavaCallable {
+public class BuiltinCallable extends JavaCallable {
     private final String name;
 
     BuiltinCallable(String name) {
         this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 

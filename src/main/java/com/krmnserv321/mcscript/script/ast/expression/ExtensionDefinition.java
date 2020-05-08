@@ -6,8 +6,8 @@ import com.krmnserv321.mcscript.script.ast.statement.Statement;
 public class ExtensionDefinition extends FunctionDefinition {
     private Identifier extension;
 
-    public ExtensionDefinition(Token token, Identifier type, Identifier extension, Statement body) {
-        super(token, type, body);
+    public ExtensionDefinition(Token token, Identifier type, Identifier extension, Identifier returnType, Statement body) {
+        super(token, type, returnType, body);
         this.extension = extension;
     }
 
@@ -21,6 +21,9 @@ public class ExtensionDefinition extends FunctionDefinition {
 
     @Override
     public String toString() {
+        if (getReturnType() != null) {
+            return getTokenLiteral() + " " + getName() + "." + getExtension() + "(" + getParameters() + "): " + getReturnType() + " " + getBody();
+        }
         return getTokenLiteral() + " " + getName() + "." + getExtension() + "(" + getParameters() + ") " + getBody();
     }
 }

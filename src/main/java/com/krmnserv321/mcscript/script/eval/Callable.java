@@ -3,7 +3,7 @@ package com.krmnserv321.mcscript.script.eval;
 import com.krmnserv321.mcscript.script.ast.Token;
 import com.krmnserv321.mcscript.script.java.Pair;
 
-abstract class Callable {
+public abstract class Callable {
     protected Token token;
 
     public void setToken(Token token) {

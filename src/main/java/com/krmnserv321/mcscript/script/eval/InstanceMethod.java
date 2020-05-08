@@ -7,16 +7,16 @@ import com.krmnserv321.mcscript.script.java.Pair;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-class InstanceMethod extends JavaCallable {
+public class InstanceMethod extends JavaCallable {
     private final PublicEnvironment publicEnvironment;
     private final Object receiver;
-    private final String fieldName;
+    private final String name;
     private final boolean unsafe;
 
-    InstanceMethod(PublicEnvironment publicEnvironment, Object receiver, String fieldName, boolean unsafe) {
+    InstanceMethod(PublicEnvironment publicEnvironment, Object receiver, String name, boolean unsafe) {
         this.publicEnvironment = publicEnvironment;
         this.receiver = receiver;
-        this.fieldName = fieldName;
+        this.name = name;
         this.unsafe = unsafe;
     }
 
@@ -24,12 +24,12 @@ class InstanceMethod extends JavaCallable {
         return publicEnvironment;
     }
 
-    Object getReceiver() {
+    public Object getReceiver() {
         return receiver;
     }
 
-    String getFieldName() {
-        return fieldName;
+    public String getName() {
+        return name;
     }
     
     boolean isUnsafe() {
@@ -70,7 +70,7 @@ class InstanceMethod extends JavaCallable {
 
     @Override
     public String toString() {
-        return receiver.getClass().getName() + "." + fieldName;
+        return receiver.getClass().getName() + "." + name;
     }
 
     @Override
@@ -81,11 +81,11 @@ class InstanceMethod extends JavaCallable {
         return unsafe == that.unsafe &&
                 Objects.equal(publicEnvironment, that.publicEnvironment) &&
                 Objects.equal(receiver, that.receiver) &&
-                Objects.equal(fieldName, that.fieldName);
+                Objects.equal(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(publicEnvironment, receiver, fieldName, unsafe);
+        return Objects.hashCode(publicEnvironment, receiver, name, unsafe);
     }
 }

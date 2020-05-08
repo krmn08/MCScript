@@ -16,6 +16,14 @@ public class CallableMethod extends JavaCallable {
         this.method = method;
     }
 
+    Object getReceiver() {
+        return receiver;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
     @Override
     public Object call(Object... args) {
         try {
@@ -40,14 +48,6 @@ public class CallableMethod extends JavaCallable {
         } catch (InvocationTargetException e) {
             return new ScriptError(token, e.getCause());
         }
-    }
-
-    Object getReceiver() {
-        return receiver;
-    }
-
-    Method getMethod() {
-        return method;
     }
 
     @Override

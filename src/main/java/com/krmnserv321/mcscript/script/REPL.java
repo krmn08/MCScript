@@ -16,7 +16,7 @@ public class REPL {
         Scanner scanner = new Scanner(in);
         PublicEnvironment publicEnvironment = new PublicEnvironment(loader);
         Environment environment = new Environment(publicEnvironment);
-        System.out.println("enter /exit to exit");
+        out.println("enter /exit to exit");
         while (true) {
             out.print(PROMPT);
             String line = scanner.nextLine();

@@ -20,9 +20,9 @@ public final class Builtin {
     private static int iota = 0;
 
     static {
-        addFunction(new BuiltinFunction("Field", Object.class) {
+        addFunction(new BuiltinFunction("Field", FieldMap.class, Object.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public FieldMap call(FunctionArguments args) {
                 Object o = args.get(0);
                 FieldMap fieldMap = new FieldMap();
                 if (o instanceof ClassObject) {
@@ -101,31 +101,31 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Load", String.class) {
+        addFunction(new BuiltinFunction("Load", YamlConfiguration.class, String.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public YamlConfiguration call(FunctionArguments args) {
                 String path = args.get(0);
                 return YamlConfiguration.loadConfiguration(new File(path));
             }
         });
 
-        addFunction(new BuiltinFunction("ToString", Object.class) {
+        addFunction(new BuiltinFunction("ToString", String.class, Object.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public String call(FunctionArguments args) {
                 return EvalUtils.toString(args.get(0));
             }
         });
 
-        addFunction(new BuiltinFunction("Add", Collection.class, Object.class) {
+        addFunction(new BuiltinFunction("Add", Boolean.class, Collection.class, Object.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public Boolean call(FunctionArguments args) {
                 Collection<Object> collection = args.get(0);
                 Object value = args.get(1);
                 return collection.add(value);
             }
         });
 
-        addFunction(new BuiltinFunction("Remove", List.class, int.class) {
+        addFunction(new BuiltinFunction("Remove", Object.class, List.class, int.class) {
             @Override
             public Object call(FunctionArguments args) {
                 List<Object> list = args.get(0);
@@ -134,7 +134,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Remove", Collection.class, Object.class) {
+        addFunction(new BuiltinFunction("Remove", Object.class, Collection.class, Object.class) {
             @Override
             public Object call(FunctionArguments args) {
                 Collection<Object> collection = args.get(0);
@@ -143,9 +143,9 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Length", Object.class) {
+        addFunction(new BuiltinFunction("Length", Integer.class, Object.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public Integer call(FunctionArguments args) {
                 Object o = args.get(0);
                 if (o instanceof CharSequence) {
                     CharSequence sequence = (CharSequence) o;
@@ -156,7 +156,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Array", true, ClassObject.class, int.class) {
+        addFunction(new BuiltinFunction("Array", true, Object[].class, ClassObject.class, int.class) {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject type = args.get(0);
@@ -166,7 +166,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Array", ClassObject.class, List.class) {
+        addFunction(new BuiltinFunction("Array", Object[].class, ClassObject.class, List.class) {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject type = args.get(0);
@@ -181,7 +181,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Array", ClassObject.class, List.class, java.util.function.Function.class) {
+        addFunction(new BuiltinFunction("Array", Object[].class, ClassObject.class, List.class, java.util.function.Function.class) {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject type = args.get(0);
@@ -197,7 +197,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Char", Integer.class) {
+        addFunction(new BuiltinFunction("Char", Character.class, Integer.class) {
             @Override
             public Character call(FunctionArguments args) {
                 Integer integer = args.get(0);
@@ -205,7 +205,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Int", Character.class) {
+        addFunction(new BuiltinFunction("Int", Integer.class, Character.class) {
             @Override
             public Integer call(FunctionArguments args) {
                 char character = args.get(0);
@@ -213,7 +213,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Cast", ClassObject.class, Number.class) {
+        addFunction(new BuiltinFunction("Cast", Object.class, ClassObject.class, Number.class) {
             @Override
             public Object call(FunctionArguments args) {
                 ClassObject object = args.get(0);
@@ -222,7 +222,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Print", Object.class) {
+        addFunction(new BuiltinFunction("Print", void.class, Object.class) {
             @Override
             public Object call(FunctionArguments args) {
                 Object object = args.get(0);
@@ -231,7 +231,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Println", Object.class) {
+        addFunction(new BuiltinFunction("Println", void.class, Object.class) {
             @Override
             public Object call(FunctionArguments args) {
                 Object object = args.get(0);
@@ -240,7 +240,7 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("ExecTime", Function.class) {
+        addFunction(new BuiltinFunction("ExecTime", Long.class, Function.class) {
             @Override
             public Object call(FunctionArguments args) {
                 Function function = args.get(0);
@@ -257,18 +257,18 @@ public final class Builtin {
             }
         });
 
-        addFunction(new BuiltinFunction("Iota", Integer.class) {
+        addFunction(new BuiltinFunction("Iota", Integer.class, Integer.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public Integer call(FunctionArguments args) {
                 Integer i = args.get(0);
                 iota = i;
                 return i;
             }
         });
 
-        addFunction(new BuiltinFunction("Iota") {
+        addFunction(new BuiltinFunction("Iota", Integer.class) {
             @Override
-            public Object call(FunctionArguments args) {
+            public Integer call(FunctionArguments args) {
                 return ++iota;
             }
         });
@@ -292,5 +292,9 @@ public final class Builtin {
 
     public static boolean contains(String name) {
         return builtinMap.containsKey(name);
+    }
+
+    public static Map<String, List<BuiltinFunction>> getBuiltinMap() {
+        return builtinMap;
     }
 }

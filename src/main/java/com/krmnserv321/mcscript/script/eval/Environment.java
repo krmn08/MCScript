@@ -96,6 +96,16 @@ public class Environment {
         return publicEnvironment;
     }
 
+    public Map<String, Object> getAll() {
+        Map<String, Object> map = new HashMap<>(storeMap);
+        map.putAll(constMap);
+        if (outer != null) {
+            map.putAll(outer.getAll());
+        }
+
+        return map;
+    }
+
     private Map<String, Object> getOuterMap(String key) {
         if (storeMap.containsKey(key)) {
             return storeMap;

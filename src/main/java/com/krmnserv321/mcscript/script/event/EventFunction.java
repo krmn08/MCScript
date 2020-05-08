@@ -10,7 +10,7 @@ public class EventFunction extends Function {
     private final EventPriority priority;
 
     public EventFunction(Environment environment, Token token, EventPriority priority, Block body) {
-        super(environment, body);
+        super(environment, null, body);
         setToken(token);
         this.priority = priority;
     }

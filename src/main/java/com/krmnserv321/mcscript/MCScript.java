@@ -146,6 +146,11 @@ public final class MCScript extends JavaPlugin implements Listener {
             }
         }
 
+        Environment environment = sender instanceof Player ? environmentMap.get(sender) : commandEnvironment;
+        String src = String.join(" ", args);
+        ScriptCompleter completer = new ScriptCompleter(environment, applyDefine(src));
+        result.addAll(completer.complete());
+
         return result;
     }
 

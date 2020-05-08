@@ -18,11 +18,11 @@ public class ClassMethod extends JavaCallable {
         this.unsafe = unsafe;
     }
 
-    Class<?> getReceiver() {
+    public Class<?> getReceiver() {
         return receiver;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 

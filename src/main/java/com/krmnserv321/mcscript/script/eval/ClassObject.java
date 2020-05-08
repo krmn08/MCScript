@@ -7,7 +7,7 @@ import com.krmnserv321.mcscript.script.java.Pair;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-class ClassObject extends JavaCallable {
+public class ClassObject extends JavaCallable {
     private final Class<?> object;
     private boolean unsafe;
 
@@ -19,7 +19,7 @@ class ClassObject extends JavaCallable {
         return new ClassObject(object);
     }
 
-    Class<?> getObject() {
+    public Class<?> getObject() {
         return object;
     }
 

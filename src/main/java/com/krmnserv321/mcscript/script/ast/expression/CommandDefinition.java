@@ -1,13 +1,13 @@
 package com.krmnserv321.mcscript.script.ast.expression;
 
 import com.krmnserv321.mcscript.script.ast.Token;
-import com.krmnserv321.mcscript.script.ast.statement.Block;
+import com.krmnserv321.mcscript.script.ast.statement.Statement;
 
 public class CommandDefinition extends FunctionDefinition {
     private boolean isVarArgs;
 
-    public CommandDefinition(Token token, boolean isVarArgs, Identifier name, Block body) {
-        super(token, name, body);
+    public CommandDefinition(Token token, boolean isVarArgs, Identifier name, Statement body) {
+        super(token, name, null, body);
         this.isVarArgs = isVarArgs;
     }
 
@@ -21,6 +21,10 @@ public class CommandDefinition extends FunctionDefinition {
 
     @Override
     public String toString() {
-        return getTokenLiteral() + " " + getName() + "(" + getParameters() + ") " + getBody();
+        String tilde = isVarArgs ? "~" : "";
+        if (getReturnType() != null) {
+            return getTokenLiteral() + " " + tilde + getName() + "(" + getParameters() + "): " + getReturnType() + " " + getBody();
+        }
+        return getTokenLiteral() + " " + tilde + getName() + "(" + getParameters() + ") " + getBody();
     }
 }
