@@ -413,7 +413,7 @@ public final class Evaluator {
                 }
                 environment.putConstant(name, evaluated);
             } else {
-                return new ScriptError(node.getToken(), expression + " is not class a");
+                return new ScriptError(node.getToken(), expression + " is not class");
             }
         } else if (node instanceof NullCheckExpression) {
             NullCheckExpression expression = (NullCheckExpression) node;
