@@ -17,7 +17,6 @@ import static com.krmnserv321.mcscript.script.eval.EvalUtils.isStatic;
 import static com.krmnserv321.mcscript.script.eval.EvalUtils.toProperty;
 
 public class ScriptCompleter {
-    private static final Pattern PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*(\\([^)]*\\))?(\\.|(\\.[a-zA-Z][a-zA-Z0-9_]*(\\([^)]*\\))?))*$");
     private static final Pattern IDENTIFIER_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*$");
 
     private final Environment environment;
@@ -27,8 +26,41 @@ public class ScriptCompleter {
 
     public ScriptCompleter(Environment environment, String src) {
         this.environment = environment;
-        Matcher matcher = PATTERN.matcher(src);
-        this.src = matcher.find() ? matcher.group() : "";
+        if (src.isEmpty()) {
+            this.src = "";
+            prefix = "";
+            return;
+        }
+
+        int len = src.length();
+        int l = src.charAt(len - 1) == '.' ? len - 1 : len;
+        int begin = l;
+        for (int i = l - 1; i > 0; i--) {
+            if (src.charAt(i) == ')') {
+                int count = 1;
+                for (int j = i - 1; j > 0 && count > 0; i--, j--) {
+                    if (src.charAt(i) == ')') {
+                        count++;
+                    } else if (src.charAt(i) == '(') {
+                        count--;
+                    }
+                }
+            }
+
+            Matcher matcher = IDENTIFIER_PATTERN.matcher(src.substring(0, i));
+            if (matcher.find()) {
+                begin = matcher.start();
+                i = begin - 1;
+            } else {
+                break;
+            }
+
+            if (i > 0 && src.charAt(i) != '.') {
+                break;
+            }
+        }
+
+        this.src = src.substring(begin);
 
         String[] split = src.split(" ");
         if (split.length > 0) {
@@ -56,7 +88,10 @@ public class ScriptCompleter {
             }
 
             if (count == 0 && src.charAt(i) == '.') {
-                strings.add(src.substring(start, i));
+                String s = src.substring(start, i);
+                if (!s.isEmpty()) {
+                    strings.add(s);
+                }
                 i++;
                 start = i;
             }
