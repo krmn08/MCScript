@@ -38,16 +38,19 @@ public class ScriptCompleter {
         for (int i = l - 1; i > 0; i--) {
             if (src.charAt(i) == ')') {
                 int count = 1;
-                for (int j = i - 1; j > 0 && count > 0; i--, j--) {
+                i--;
+                while (i > 0 && count > 0) {
                     if (src.charAt(i) == ')') {
                         count++;
                     } else if (src.charAt(i) == '(') {
                         count--;
                     }
+
+                    i--;
                 }
             }
 
-            Matcher matcher = IDENTIFIER_PATTERN.matcher(src.substring(0, i));
+            Matcher matcher = IDENTIFIER_PATTERN.matcher(src.substring(0, i + 1));
             if (matcher.find()) {
                 begin = matcher.start();
                 i = begin - 1;
