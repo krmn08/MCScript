@@ -24,6 +24,45 @@ public class ScriptCompleter {
 
     private final String prefix;
 
+    private final List<String> keywords = Arrays.asList(
+            "runnable",
+            "const",
+            "import",
+            "null",
+            "instanceof",
+            "is",
+            "isnot",
+            "in",
+            "notin",
+            "fun",
+            "command",
+            "true",
+            "false",
+            "while",
+            "for",
+            "break",
+            "continue",
+            "switch",
+            "default",
+            "if",
+            "elif",
+            "else",
+            "return",
+            "vararg",
+            "throw",
+            "try",
+            "catch",
+            "defer",
+            "boolean",
+            "char",
+            "byte",
+            "short",
+            "int",
+            "long",
+            "float",
+            "double"
+    );
+
     public ScriptCompleter(Environment environment, String src) {
         this.environment = environment;
         if (src.isEmpty()) {
@@ -489,6 +528,7 @@ public class ScriptCompleter {
         Builtin.getBuiltinMap().keySet().stream()
                 .map(s -> s + "()")
                 .forEach(result::add);
+        result.addAll(keywords);
         return result;
     }
 }
