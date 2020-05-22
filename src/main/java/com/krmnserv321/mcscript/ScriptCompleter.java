@@ -329,21 +329,38 @@ public class ScriptCompleter {
             for (Method method : methods) {
                 if (staticMember == isStatic(method)) {
                     String name = method.getName();
+                    if (!IDENTIFIER_PATTERN.matcher(name).matches()) {
+                        continue;
+                    }
+
                     String unsafe = Modifier.isPublic(method.getModifiers()) ? "" : "!";
                     if (checkMember(name, member)) {
                         result.add(method.getName() + unsafe + "()");
                     }
 
-                    if (name.startsWith("get") || name.startsWith("set")) {
+                    if (name.startsWith("get")) {
                         String sub = name.substring(3);
-                        if (checkMember(sub, member)) {
-                            result.add(toProperty(sub) + unsafe);
+                        if (method.getParameterCount() == 0) {
+                            if (checkMember(sub, member)) {
+                                result.add(toProperty(sub) + unsafe);
+                            }
+                        }
+                    }
+
+                    if (name.startsWith("set")) {
+                        String sub = name.substring(3);
+                        if (method.getParameterCount() == 1) {
+                            if (checkMember(sub, member)) {
+                                result.add(toProperty(sub) + unsafe);
+                            }
                         }
                     }
 
                     if (name.startsWith("is")) {
-                        if (checkMember(name, member)) {
-                            result.add(name + unsafe);
+                        if (method.getParameterCount() == 0) {
+                            if (checkMember(name, member)) {
+                                result.add(name + unsafe);
+                            }
                         }
                     }
                 }
@@ -353,6 +370,10 @@ public class ScriptCompleter {
             for (Field field : fields) {
                 if (staticMember == isStatic(field)) {
                     String name = field.getName();
+                    if (!IDENTIFIER_PATTERN.matcher(name).matches()) {
+                        continue;
+                    }
+
                     String unsafe = Modifier.isPublic(field.getModifiers()) ? "" : "!";
                     if (checkMember(name, member)) {
                         result.add(name + unsafe);
