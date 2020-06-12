@@ -416,7 +416,7 @@ public final class MCScript extends JavaPlugin implements Listener {
 
     private Set<Class<?>> getBukkitClasses() throws UnsupportedEncodingException {
         String path = URLDecoder.decode(Bukkit.class.getResource("Bukkit.class").getPath(), "UTF-8");
-        String jarPath = path.substring("file:/".length(), path.lastIndexOf("!"));
+        String jarPath = path.substring("file:".length(), path.lastIndexOf("!"));
         ClassLoader loader = getClassLoader();
         try {
             JarFile jarFile = new JarFile(jarPath);
