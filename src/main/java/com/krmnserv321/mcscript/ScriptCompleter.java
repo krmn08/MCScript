@@ -1,9 +1,7 @@
 package com.krmnserv321.mcscript;
 
-import com.krmnserv321.mcscript.script.Lexer;
-import com.krmnserv321.mcscript.script.Parser;
-import com.krmnserv321.mcscript.script.Program;
 import com.krmnserv321.mcscript.script.eval.*;
+import org.bukkit.event.Event;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -18,11 +16,15 @@ import static com.krmnserv321.mcscript.script.eval.EvalUtils.toProperty;
 
 public class ScriptCompleter {
     private static final Pattern IDENTIFIER_PATTERN = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*$");
+    private static final Pattern EVENT_PATTERN = Pattern.compile("^@\\s*?([a-zA-Z][a-zA-Z0-9_]*?)\\s*?\\{");
 
     private final Environment environment;
     private final String src;
 
     private final String prefix;
+
+    private boolean isEvent = false;
+    private ClassObject eventClass = null;
 
     private final List<String> keywords = Arrays.asList(
             "runnable",
@@ -71,6 +73,25 @@ public class ScriptCompleter {
             return;
         }
 
+        if (src.charAt(0) == '@') {
+            Matcher matcher = EVENT_PATTERN.matcher(src);
+            if (matcher.find()) {
+                String name = matcher.group();
+                Object event = environment.get(name + "Event");
+                if (event instanceof Class<?>) {
+                    eventClass = ClassObject.of((Class<?>) event);
+                }
+            } else {
+                Matcher m = IDENTIFIER_PATTERN.matcher(src.substring(1));
+                if (m.matches()) {
+                    isEvent = true;
+                    prefix = src.substring(0, m.start());
+                    this.src = src.substring(1).trim();
+                    return;
+                }
+            }
+        }
+
         int len = src.length();
         int l = src.charAt(len - 1) == '.' ? len - 1 : len;
         int begin = l;
@@ -89,7 +110,7 @@ public class ScriptCompleter {
                 }
             }
 
-            Matcher matcher = IDENTIFIER_PATTERN.matcher(src.substring(0, i + 1));
+            Matcher matcher = EVENT_PATTERN.matcher(src.substring(0, i + 1));
             if (matcher.find()) {
                 begin = matcher.start();
                 i = begin - 1;
@@ -110,7 +131,7 @@ public class ScriptCompleter {
             if (!last.isEmpty() && last.charAt(last.length() - 1) == '.') {
                 prefix = last;
             } else {
-                Matcher ident = IDENTIFIER_PATTERN.matcher(last);
+                Matcher ident = EVENT_PATTERN.matcher(last);
                 prefix = ident.find() ? last.substring(0, ident.start(0)) : "";
             }
         } else {
@@ -119,6 +140,14 @@ public class ScriptCompleter {
     }
 
     public List<String> complete() {
+        if (isEvent) {
+            String lowerCase = src.toLowerCase();
+            return getEvents().stream()
+                    .filter(s -> s.contains(lowerCase))
+                    .map(this::addPrefix)
+                    .collect(Collectors.toList());
+        }
+
         List<String> strings = new ArrayList<>();
         int start = 0;
         int count = 0;
@@ -139,7 +168,7 @@ public class ScriptCompleter {
             }
         }
 
-        Matcher matcher = IDENTIFIER_PATTERN.matcher(src);
+        Matcher matcher = EVENT_PATTERN.matcher(src);
         String identifier = matcher.find() ? matcher.group(0) : "";
 
         if (start == src.length()) {
@@ -329,7 +358,7 @@ public class ScriptCompleter {
             for (Method method : methods) {
                 if (staticMember == isStatic(method)) {
                     String name = method.getName();
-                    if (!IDENTIFIER_PATTERN.matcher(name).matches()) {
+                    if (!EVENT_PATTERN.matcher(name).matches()) {
                         continue;
                     }
 
@@ -370,7 +399,7 @@ public class ScriptCompleter {
             for (Field field : fields) {
                 if (staticMember == isStatic(field)) {
                     String name = field.getName();
-                    if (!IDENTIFIER_PATTERN.matcher(name).matches()) {
+                    if (!EVENT_PATTERN.matcher(name).matches()) {
                         continue;
                     }
 
@@ -482,15 +511,19 @@ public class ScriptCompleter {
         return null;
     }
 
-
     private Object eval(String input) {
-        Parser parser = new Parser(new Lexer(input));
-        Program program = parser.parseProgram();
-        if (!parser.getErrors().isEmpty()) {
-            return new ScriptError(program.getToken(), "parser error");
+        if (input.equals("event") && eventClass != null) {
+            return eventClass;
+        }
+        Object o = environment.get(input);
+        if (o == null) {
+            o = environment.checkClassName(input);
+            if (o == null) {
+                return new ScriptError(null, "");
+            }
         }
 
-        return program.eval(environment);
+        return o;
     }
 
     private String removeArguments(String str) {
@@ -550,6 +583,22 @@ public class ScriptCompleter {
                 .map(s -> s + "()")
                 .forEach(result::add);
         result.addAll(keywords);
+        return result;
+    }
+
+    private List<String> getEvents() {
+        List<String> result = new ArrayList<>();
+        environment.getAll().entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Class<?>)
+                .filter(entry -> Event.class.isAssignableFrom((Class<?>) entry.getValue()))
+                .map(Map.Entry::getKey)
+                .forEach(result::add);
+
+        environment.getPublicEnvironment().getStoreMap().entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Class<?>)
+                .filter(entry -> Event.class.isAssignableFrom((Class<?>) entry.getValue()))
+                .map(Map.Entry::getKey)
+                .forEach(result::add);
         return result;
     }
 }

@@ -277,7 +277,13 @@ public final class MCScript extends JavaPlugin implements Listener {
             commandEnvironment = new Environment(publicEnvironment);
 
             List<String> ignoreList = config.getStringList("Ignore");
-            config.getStringList("Import").forEach(publicEnvironment::importClass);
+            config.getStringList("Import").forEach(s -> {
+                if (s.charAt(s.length() - 1) == '*') {
+                    publicEnvironment.importPackage(s.substring(0, s.length() - 2));
+                } else {
+                    publicEnvironment.importClass(s);
+                }
+            });
 
             getBukkitClasses().forEach(publicEnvironment::importClass);
 

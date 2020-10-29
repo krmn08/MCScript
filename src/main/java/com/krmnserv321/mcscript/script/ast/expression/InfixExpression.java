@@ -43,6 +43,8 @@ public class InfixExpression extends Expression {
     public String toString() {
         if (operator.equals(".")) {
             return left + operator + right;
+        } else if (operator.equals(".*")) {
+            return left + operator;
         }
         return left + " " + operator + " " + right;
     }

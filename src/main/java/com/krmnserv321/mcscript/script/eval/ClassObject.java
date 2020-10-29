@@ -15,7 +15,7 @@ public class ClassObject extends JavaCallable {
         this.object = object;
     }
 
-    static ClassObject of(Class<?> object) {
+    public static ClassObject of(Class<?> object) {
         return new ClassObject(object);
     }
 

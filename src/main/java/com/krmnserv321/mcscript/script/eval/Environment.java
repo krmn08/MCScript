@@ -2,9 +2,7 @@ package com.krmnserv321.mcscript.script.eval;
 
 import com.krmnserv321.mcscript.script.ast.statement.Statement;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class Environment {
     private static final NullObject NULL = new NullObject();
@@ -14,6 +12,8 @@ public class Environment {
 
     private final Map<String, Object> storeMap = new HashMap<>();
     private final Map<String, Object> constMap = new HashMap<>();
+
+    private final List<String> packageList = new ArrayList<>();
 
     private Stack<DeferObject> deferStack;
 
@@ -36,12 +36,20 @@ public class Environment {
 
     public Object get(String key) {
         Object value = constMap.get(key);
-        if (value == null) {
-            value = storeMap.get(key);
+        if (value == null && constMap.containsKey(key)) {
+            return NULL;
         }
 
         if (value == null) {
             value = publicEnvironment.get(key);
+        }
+
+        if (value == null && publicEnvironment.isPublic(key)) {
+            return NULL;
+        }
+
+        if (value == null) {
+            value = storeMap.get(key);
         }
 
         if (value == null) {
@@ -68,6 +76,26 @@ public class Environment {
 
     public void putConstant(String key, Object value) {
         constMap.put(key, value);
+    }
+
+    public void addPackage(String pkg) {
+        packageList.add(pkg);
+    }
+
+    public Class<?> checkClassName(String name) {
+        ClassLoader loader = publicEnvironment.getClassLoader();
+        for (String pkg : packageList) {
+            try {
+                return loader.loadClass(pkg + "." + name);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+
+        if (outer != null) {
+            return outer.checkClassName(name);
+        }
+
+        return publicEnvironment.checkClassName(name);
     }
 
     public void addDefer(Environment environment, Statement statement) {

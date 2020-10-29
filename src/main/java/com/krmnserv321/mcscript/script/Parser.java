@@ -68,6 +68,7 @@ public class Parser {
             put(TokenType.LBracket, Precedence.Access);
             put(TokenType.LParen, Precedence.Call);
             put(TokenType.Dot, Precedence.Dot);
+            put(TokenType.Wildcard, Precedence.Dot);
         }
     };
 
@@ -98,6 +99,7 @@ public class Parser {
         prefixParseMap.put(TokenType.DoubleClass, this::parseKeyword);
 
         prefixParseMap.put(TokenType.Constant, this::parseConstantExpression);
+        prefixParseMap.put(TokenType.Public, this::parsePublicExpression);
 
         prefixParseMap.put(TokenType.Null, this::parseNullLiteral);
         prefixParseMap.put(TokenType.Character, this::parseCharacterLiteral);
@@ -185,6 +187,8 @@ public class Parser {
         infixParseMap.put(TokenType.NullCheck, this::parseNullCheckExpression);
         infixParseMap.put(TokenType.LParen, this::parseCallExpression);
         infixParseMap.put(TokenType.LBracket, this::parseAccessExpression);
+
+        infixParseMap.put(TokenType.Wildcard, this::parseWildcard);
 
         nextToken();
         nextToken();
@@ -663,6 +667,22 @@ public class Parser {
         return new ConstantExpression(token, ident, parseExpression(Precedence.Lowest));
     }
 
+    private PublicExpression parsePublicExpression() {
+        Token token = curToken;
+        if (!expectPeek(TokenType.Identifier)) {
+            return null;
+        }
+
+        Identifier ident = new Identifier(curToken);
+
+        if (!expectPeek(TokenType.Assign)) {
+            return null;
+        }
+        nextToken();
+
+        return new PublicExpression(token, ident, parseExpression(Precedence.Lowest));
+    }
+
     private AssignExpression parseAssignExpression(Expression left) {
         Token token = curToken;
         nextToken();
@@ -1082,6 +1102,11 @@ public class Parser {
         }
 
         return new NullCheckExpression(token, left, expression);
+    }
+
+    private InfixExpression parseWildcard(Expression left) {
+        Token token = curToken;
+        return new InfixExpression(token, token.toString(), left, None.NONE);
     }
 
     private TernaryOperator parseTernaryOperator(Expression left) {

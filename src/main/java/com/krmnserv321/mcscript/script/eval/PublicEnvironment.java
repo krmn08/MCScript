@@ -1,6 +1,8 @@
 package com.krmnserv321.mcscript.script.eval;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PublicEnvironment {
@@ -8,6 +10,7 @@ public class PublicEnvironment {
 
     private final Map<String, Object> storeMap = new HashMap<>();
     private final Map<Class<?>, Map<String, Function>> extensionMap = new HashMap<>();
+    private final List<String> packageList = new ArrayList<>();
 
     public PublicEnvironment(ClassLoader loader) {
         this.loader = loader;
@@ -26,6 +29,21 @@ public class PublicEnvironment {
         importClass(Long.class);
         importClass(Float.class);
         importClass(Double.class);
+    }
+
+    public void importPackage(String pkg) {
+        packageList.add(pkg);
+    }
+
+    public Class<?> checkClassName(String name) {
+        for (String pkg : packageList) {
+            try {
+                return loader.loadClass(pkg + "." + name);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+
+        return null;
     }
 
     public void importClass(Class<?> clazz) {

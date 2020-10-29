@@ -16,6 +16,7 @@ public enum TokenType {
     Float,
 
     Constant,
+    Public,
 
     Assign,
     ColonAssign,
@@ -70,6 +71,7 @@ public enum TokenType {
     Comma,
     Colon,
     Semicolon,
+    Wildcard,
 
     Arrow,
 

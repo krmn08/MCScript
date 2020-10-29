@@ -184,7 +184,13 @@ public final class Evaluator {
             }
 
             if (value == null) {
-                return new ScriptError(node.getToken(), "identifier not found: " + ident);
+                Class<?> clazz = environment.checkClassName(ident);
+                if (clazz == null) {
+                    return new ScriptError(node.getToken(), "identifier not found: " + ident);
+                }
+
+                environment.putConstant(ident, ClassObject.of(clazz));
+                value = clazz;
             }
 
             return value;
@@ -295,11 +301,11 @@ public final class Evaluator {
                 PublicEnvironment publicEnvironment = environment.getPublicEnvironment();
                 if (!publicEnvironment.isPublic(name)) {
                     function.setEnvironment(new Environment(publicEnvironment));
-                    environment.getPublicEnvironment().put(name, function);
+                    publicEnvironment.put(name, function);
                     return function;
                 }
 
-                return new ScriptError(node.getToken(), "cannot overwrite a public function");
+                return new ScriptError(node.getToken(), "cannot overwrite a public object");
             } else {
                 environment.putConstant(name, function);
             }
@@ -393,11 +399,31 @@ public final class Evaluator {
 
             String name = expression.getName().toString();
             if (Builtin.contains(name)) {
-                return new ScriptError(node.getToken(), "cannot assign to a builtin function");
+                return new ScriptError(node.getToken(), "cannot overwrite a builtin function");
             }
 
             environment.putConstant(name, value);
             return value;
+        } else if (node instanceof PublicExpression) {
+            PublicExpression expression = (PublicExpression) node;
+            Object value = eval(environment, expression.getValue());
+            if (isError(value)) {
+                return value;
+            }
+
+            String name = expression.getName().toString();
+            if (Builtin.contains(name)) {
+                return new ScriptError(node.getToken(), "cannot overwrite a builtin function");
+            }
+
+            PublicEnvironment publicEnvironment = environment.getPublicEnvironment();
+
+            if (!publicEnvironment.isPublic(name)) {
+                publicEnvironment.put(name, value);
+                return value;
+            }
+
+            return new ScriptError(node.getToken(), "cannot overwrite a public object");
         } else if (node instanceof ImportStatement) {
             ImportStatement statement = (ImportStatement) node;
             Expression expression = statement.getExpression();
@@ -409,9 +435,12 @@ public final class Evaluator {
                 String fqcn = expression.toString();
                 String name = fqcn.substring(fqcn.lastIndexOf('.') + 1);
                 if (Builtin.contains(name)) {
-                    return new ScriptError(node.getToken(), "cannot assign to a builtin function");
+                    return new ScriptError(node.getToken(), "cannot overwrite a builtin function");
                 }
                 environment.putConstant(name, evaluated);
+            } else if (evaluated instanceof PackageObject) {
+                PackageObject object = (PackageObject) evaluated;
+                environment.addPackage(object.getName());
             } else {
                 return new ScriptError(node.getToken(), expression + " is not class");
             }
@@ -570,6 +599,15 @@ public final class Evaluator {
             InfixExpression infix = (InfixExpression) node;
             String operator = infix.getOperator();
             Expression l = infix.getLeft();
+            if (operator.equals(".*")) {
+                Object le = eval(environment, l);
+                if (le instanceof Identifier) {
+                    return new PackageObject(l.toString());
+                }
+                
+                return new ScriptError(infix.getToken(), l + " is not an identifier");
+            }
+
             Expression r = infix.getRight();
             if (operator.equals(".")) {
                 Object le;
@@ -1353,7 +1391,11 @@ public final class Evaluator {
             if (name instanceof Identifier) {
                 String ident = name.toString();
                 if (Builtin.contains(ident)) {
-                    return new ScriptError(token, "cannot assign to a builtin function");
+                    return new ScriptError(token, "cannot overwrite a builtin function");
+                }
+
+                if (environment.getPublicEnvironment().isPublic(ident)) {
+                    return new ScriptError(token, "cannot overwrite a public object");
                 }
 
                 environment.put(ident, right);

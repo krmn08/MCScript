@@ -10,6 +10,7 @@ public class Lexer {
     private static final Token EOF = new Token(TokenType.EOF, "");
 
     private static final Token CONSTANT = new Token(TokenType.Constant, "const");
+    private static final Token PUBLIC = new Token(TokenType.Constant, "public");
 
     private static final Token ASSIGN = new Token(TokenType.Assign, "=");
     private static final Token COLON_ASSIGN = new Token(TokenType.ColonAssign, ":=");
@@ -64,6 +65,7 @@ public class Lexer {
     private static final Token COMMA = new Token(TokenType.Comma, ",");
     private static final Token COLON = new Token(TokenType.Colon, ":");
     private static final Token SEMICOLON = new Token(TokenType.Semicolon, ";");
+    private static final Token WILDCARD = new Token(TokenType.Wildcard, ".*");
 
     private static final Token ARROW = new Token(TokenType.Arrow, "->");
 
@@ -153,6 +155,7 @@ public class Lexer {
             RUNNABLE,
 
             CONSTANT,
+            PUBLIC,
 
             IMPORT,
             NULL,
@@ -309,6 +312,9 @@ public class Lexer {
                         } else {
                             token = POWER;
                         }
+                    } else if (ch == '.') {
+                        readChar();
+                        token = WILDCARD;
                     }
                     break;
                 case '/':
